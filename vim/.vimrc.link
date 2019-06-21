@@ -1,1 +1,67 @@
-/Users/Russel/.vimrc
+" Plugins will be downloaded under the specified directory.
+call plug#begin('~/.vim/plugged')
+let g:plug_timeout=1000
+
+" Declare the list of plugins.
+" Extend vim
+Plug 'tpope/vim-sensible'
+Plug 'vim-airline/vim-airline'
+let g:deoplete#enable_at_startup = 1
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<C-j>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+Plug 'Valloric/YouCompleteMe', {'do' : './install.py --clang-completer'}
+
+" Theme
+Plug 'vim-airline/vim-airline-themes'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='onedark'
+Plug 'joshdick/onedark.vim'
+
+" Syntax & language specific
+Plug 'sheerun/vim-polyglot'
+" Disable latex-box as vimtex doesn't work with it
+let g:polyglot_disabled=['latex']
+Plug 'lervag/vimtex'
+let g:tex_flavor = 'latex'
+
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
+
+" Auto-install plugins
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+" Basic Editor settings
+" Global settings may be overwritten in ftplugin
+:set number
+:syntax on
+:set autoindent
+:colorscheme onedark
+:set autoread
+" Tab settings
+:set shiftwidth=2
+:set tabstop=2
+:set softtabstop=2
+" Text display settings
+:set linebreak
+:set textwidth=80
+:set autoindent
+:set nowrap
+:set whichwrap+=h,l,<,>,[,]
+
+:let mapleader=","
+:let maplocalleader="\\"
+
