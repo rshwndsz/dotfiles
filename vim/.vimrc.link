@@ -19,6 +19,7 @@ let g:UltiSnipsExpandTrigger = "<C-j>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 Plug 'Valloric/YouCompleteMe', {'do' : './install.py --clang-completer'}
+Plug 'scrooloose/nerdcommenter'
 
 " Theme
 Plug 'vim-airline/vim-airline-themes'
@@ -31,8 +32,7 @@ Plug 'sheerun/vim-polyglot'
 " Disable latex-box as vimtex doesn't work with it
 let g:polyglot_disabled=['latex']
 Plug 'lervag/vimtex'
-let g:tex_flavor = 'latex'
-
+let g:vimtex_view_method='skim'
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
@@ -46,6 +46,7 @@ endif
 
 " Basic Editor settings
 " Global settings may be overwritten in ftplugin
+filetype plugin on 
 :set number
 :syntax on
 :set autoindent
