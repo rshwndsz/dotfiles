@@ -5,6 +5,7 @@ let g:plug_timeout=1000
 " Declare the list of plugins.
 " Extend vim
 Plug 'tpope/vim-sensible'
+Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 let g:deoplete#enable_at_startup = 1
 Plug 'ervandew/supertab'
@@ -19,10 +20,12 @@ let g:UltiSnipsExpandTrigger = "<C-j>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 Plug 'Valloric/YouCompleteMe', {'do' : './install.py --clang-completer'}
+Plug 'tpope/vim-surround'
 Plug 'scrooloose/nerdcommenter'
 
 " Theme
 Plug 'vim-airline/vim-airline-themes'
+let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme='onedark'
 Plug 'joshdick/onedark.vim'
@@ -48,8 +51,12 @@ endif
 " Global settings may be overwritten in ftplugin
 filetype plugin on 
 :set number
-:syntax on
 :set autoindent
+if (has("termguicolors"))
+  set termguicolors
+endif
+
+:syntax on
 :colorscheme onedark
 :set autoread
 " Tab settings
@@ -62,7 +69,11 @@ filetype plugin on
 :set autoindent
 :set nowrap
 :set whichwrap+=h,l,<,>,[,]
-
-:let mapleader=","
-:let maplocalleader="\\"
+:set pastetoggle=<F11>
+" Line highlight"
+set cursorline
+hi CursorLine ctermbg=8 ctermfg=15 "8 = dark gray, 15 = white
+" leaders
+:let mapleader="\\"
+:let maplocalleader=","
 
