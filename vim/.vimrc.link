@@ -1,13 +1,10 @@
 " Plugins will be downloaded under the specified directory.
 call plug#begin('~/.vim/plugged')
-let g:plug_timeout=1000
-
 " Declare the list of plugins.
 " Extend vim
 Plug 'tpope/vim-sensible'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
-let g:deoplete#enable_at_startup = 1
 Plug 'ervandew/supertab'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
@@ -16,7 +13,7 @@ let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:SuperTabDefaultCompletionType = '<C-n>'
 " better key bindings for UltiSnipsExpandTrigger
-let g:UltiSnipsExpandTrigger = "<C-j>"
+let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 Plug 'Valloric/YouCompleteMe', {'do' : './install.py --clang-completer'}
@@ -25,10 +22,10 @@ Plug 'scrooloose/nerdcommenter'
 
 " Theme
 Plug 'vim-airline/vim-airline-themes'
+Plug 'joshdick/onedark.vim'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme='onedark'
-Plug 'joshdick/onedark.vim'
 
 " Syntax & language specific
 Plug 'sheerun/vim-polyglot'
@@ -49,16 +46,9 @@ endif
 
 " Basic Editor settings
 " Global settings may be overwritten in ftplugin
-filetype plugin on 
 :set number
-:set autoindent
-if (has("termguicolors"))
-  set termguicolors
-endif
-
-:syntax on
+:set termguicolors
 :colorscheme onedark
-:set autoread
 " Tab settings
 :set shiftwidth=2
 :set tabstop=2
@@ -66,14 +56,15 @@ endif
 " Text display settings
 :set linebreak
 :set textwidth=80
-:set autoindent
-:set nowrap
-:set whichwrap+=h,l,<,>,[,]
-:set pastetoggle=<F11>
-" Line highlight"
-set cursorline
-hi CursorLine ctermbg=8 ctermfg=15 "8 = dark gray, 15 = white
+:set nolist  " list disables linebreak
+:set textwidth=0
+:set wrapmargin=0 "prevent vim from auto inserting linebreaks in new text
+:set smartindent
+:set wrap
+" Line highlight
+:set cursorline
+hi CursorLine ctermbg=8 ctermfg=15 
 " leaders
-:let mapleader="\\"
-:let maplocalleader=","
+let mapleader="\\"
+let maplocalleader=","
 
