@@ -6,7 +6,7 @@ call plug#begin('~/.vim/plugged')
   Plug 'vim-airline/vim-airline-themes'             " Themes for vim-airline
   Plug 'crusoexia/vim-monokai'                      " Monokai colorscheme
   Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
-  Plug 'vifm/vifm'                                  " A file manager with curses interface
+  Plug 'preservim/nerdtree'                         " A tree explorer for vim
 
   Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
   Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
@@ -99,7 +99,7 @@ call plug#end()
     " Reload config file 
     nnoremap <C-s> :source ~/.config/nvim/init.vim<CR>
 
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
+    " Start interactive EasyAlign in visual mode (e.g. vipga): get-aligned
     xmap ga <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
@@ -130,7 +130,7 @@ call plug#end()
     nmap <leader>f  <Plug>(coc-format-selected)
 
     " === Some of my fav spacemacs bindings ===
-    " Close buffer in focus
+    " Close buffer in focus: buffer-delete
     nnoremap <leader>bd <C-w>q
     " Splits
     nnoremap <leader>vs :vsplit<CR>
@@ -147,14 +147,22 @@ call plug#end()
     " Move to normal mode in terminal
     tnoremap <ESC> <C-\><C-n>
 
+    " === Nerd Tree ===
+    " Toggle NERDTree: fi-letree
+    nnoremap <leader>fi :NERDTreeToggle<CR>
+    " Close vim if only window left is NERDTree
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
     " === C++ ===
+    " Compile current file: compile
     autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%< <CR>
 
     " === Goyo ===
+    " Toggle Goyo: distraction-free
     nnoremap <leader>df :Goyo<CR>
 
     " === Misc ===
-    " Remove highlighting after search
+    " Remove highlighting after search: highlighting-off
     nnoremap <leader>ho :noh<CR>
 
 " === Plugin Settings ===
@@ -175,6 +183,9 @@ call plug#end()
     let g:nerdcommentemptylines = 1                                       " allow commenting and inverting empty lines (useful when commenting a region)
     let g:nerdtrimtrailingwhitespace = 1                                  " enable trimming of trailing whitespace when uncommenting
     let g:nerdtogglecheckalllines = 1                                     " enable nerdcommentertoggle to check all selected lines is commented or not
+
+    " === nerd-tree ===
+    let NERDTreeShowLineNumbers=0
 
     " === goyo ===
     let g:goyo_width='96%'
