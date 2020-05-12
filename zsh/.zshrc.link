@@ -134,4 +134,29 @@ unset __conda_setup
 
 alias py3.7.1="source ~/py3.7.1venv/bin/activate"
 
+# See https://github.com/golang/go/wiki/SettingGOPATH#zsh
+export GOPATH=$HOME/go
+
+# Use exa instead of ls
+alias ls=exa
+
+# Rbenv stores data under ~/.rbenv by default. If you absolutely need to
+# store everything under Homebrew's prefix, include this in your profile:
+export RBENV_ROOT=/usr/local/var/rbenv
+
+# Load rbenv automatically
+eval "$(rbenv init -)"
+
+[ -f "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env" ] && source "${GHCUP_INSTALL_BASE_PREFIX:=$HOME}/.ghcup/env"
+
+
+# Aliases for compilers
+# See: https://apple.stackexchange.com/questions/99077/how-to-set-gcc-4-8-as-default-gcc-compiler/99157#99157
+alias gcc="gcc-9"
+alias cc="gcc-9"
+alias g++="g++-9"
+
+# Colors for spacemacs
+# See: https://github.com/syl20bnr/spacemacs/issues/1269#issuecomment-94319147
+export TERM=xterm-256color
 
