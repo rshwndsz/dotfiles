@@ -5,7 +5,7 @@
 export ZSH="/Users/Russel/.oh-my-zsh"
 
 # This theme sets a lot of stuff
-ZSH_THEME="agnoster"
+ZSH_THEME=""
 # Your color_preset is different
 # It is set to: Argonaut
 
@@ -44,7 +44,7 @@ ZSH_THEME="agnoster"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -69,6 +69,7 @@ ZSH_THEME="agnoster"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  zsh-autosuggestions
   zsh-syntax-highlighting
   )
 
@@ -82,11 +83,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='nvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -158,5 +159,28 @@ alias g++="g++-9"
 
 # Colors for spacemacs
 # See: https://github.com/syl20bnr/spacemacs/issues/1269#issuecomment-94319147
-export TERM=xterm-256color
+# export TERM=xterm-256color
+
+# Aliases for tmux
+alias devtm="~/dotfiles/bin/dev-tmux.sh"
+
+# Aliases for cp
+alias cpenv="tmuxinator start compro"
+alias cptm="cpenv"
+alias cptmux="cpenv"
+alias cpc="g++ -std=c++17 -Wall -Wextra -O2 main.cpp -o main.exe"
+alias cpc11="g++ -std=c++11 -Wall -Wextra -O2 main.cpp -o main.exe"
+alias cpc14="g++ -std=c++14 -Wall -Wextra -O2 main.cpp -o main.exe"
+alias cpcr="g++ -std=c++17 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
+alias cpcr11="g++ -std=c++11 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
+alias cpcr14="g++ -std=c++14 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
+alias cpr="./main.exe"
+alias endcp="tmux kill-ses -t compro"
+
+# Set $EDITOR
+export EDITOR=nvim
+
+# pure prompt
+autoload -U promptinit; promptinit
+prompt pure
 
