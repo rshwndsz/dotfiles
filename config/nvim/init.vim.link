@@ -10,10 +10,15 @@ call plug#begin('~/.vim/plugged')
     Plug 'preservim/nerdtree'                         " A tree explorer for vim
 
 " === Brains ===
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
-    " neoclide/coc-snippets  - Install using `:CocInstall coc-snippets`
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
     Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
+    " Install coc-plugins with :CocInstall <plugin-name> 
+    " Install as required
+    " Ex: :CocInstall coc-snippets
+    " neoclide/coc-snippets 
+    " neoclide/coc-lists     
+    " neoclide/coc-json
 
 " === Tmux ===
     Plug 'christoomey/vim-tmux-navigator'             " Seamless navigation between tmux panes and vim splits
@@ -28,7 +33,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
     Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
     Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
-    " Plug 'terryma/vim-multiple-cursors'               " Multiple cursor editing
 
 call plug#end()
 
@@ -38,9 +42,9 @@ call plug#end()
     set splitbelow     " Open horizontal splits at bottom
     set splitright     " Open vertical splits at right
     " For coc.vim
-    set updatetime=300 " Having longer update times lead to poor UX
-    set shortmess+=c   " Don't pass messages to |ins=completion-menu|
-    set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
+    set updatetime=300        " Having longer update times lead to poor UX
+    set shortmess+=c          " Don't pass messages to |ins-completion-menu|
+    set signcolumn=yes        " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
     set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
 
 " === Colorscheme ===
@@ -132,25 +136,22 @@ call plug#end()
 " === Keyboard bindings ===
     let mapleader = " "
     :nmap <Space> :
-
-    " Reload config file 
-    nnoremap <C-s> :w<CR>:source ~/.config/nvim/init.vim<CR>
-
+    
+    " === vim-easy-align ===
     " Start interactive EasyAlign in visual mode (e.g. vipga): get-aligned
     xmap ga <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
     
-    " === For coc.vim ===
-    " Make <tab> used for trigger completion, completion confirm, snippet expand and jump like VSCode.
-    " NOTE: Use command `:verbose imap <tab>` to make sure tab is not mapped by
-    " other plugin before putting this into your config.
+    " === coc.vim ===
+    " To make snippet completion work just like VSCode
+    " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
+    " <<< Install coc-snippets for this
     inoremap <silent><expr> <TAB>
           \ pumvisible() ? coc#_select_confirm() :
           \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
           \ <SID>check_back_space() ? "\<TAB>" :
           \ coc#refresh()
-
     function! s:check_back_space() abort
       let col = col('.') - 1
       return !col || getline('.')[col - 1]  =~# '\s'
@@ -158,15 +159,49 @@ call plug#end()
 
     let g:coc_snippet_next = '<tab>'
 
-    " Use <c-space> to trigger completion.
-    inoremap <silent><expr> <c-space> coc#refresh() 
+    " Close preview window when completion is done
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
-    " Symbol renaming.
-    nmap <leader>rn <Plug>(coc-rename)
+    " https://github.com/rstacruz/vim-coc-settings/blob/master/after/plugin/coc.vim
+    " gd - go to definition of word under cursor
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
 
-    " Formatting selected code.
-    xmap <leader>f  <Plug>(coc-format-selected)
-    nmap <leader>f  <Plug>(coc-format-selected)
+    " gi - go to implementation
+    nmap <silent> gi <Plug>(coc-implementation)
+
+    " gr - find references
+    nmap <silent> gr <Plug>(coc-references)
+
+    " gh - get hint on whatever's under the cursor
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    nnoremap <silent> gh :call <SID>show_documentation()<CR>
+    function! s:show_documentation()
+      if &filetype == 'vim'
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
+    nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
+    " List errors
+    nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<cr>
+    " List commands available in tsserver (and others)
+    nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
+    " Restart when tsserver gets wonky
+    nnoremap <silent> <leader>cR  :<C-u>CocRestart<CR>
+    nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<CR>
+    " Manage extensions
+    nnoremap <silent> <leader>cx  :<C-u>CocList extensions<cr>
+    " Rename the current word in the cursor
+    nmap <leader>cr  <Plug>(coc-rename)
+    nmap <leader>cf  <Plug>(coc-format-selected)
+    vmap <leader>cf  <Plug>(coc-format-selected)
+    " Run code actions
+    vmap <leader>ca  <Plug>(coc-codeaction-selected)
+    nmap <leader>ca  <Plug>(coc-codeaction-selected)
 
     " === Some of my fav spacemacs bindings ===
     " Close buffer in focus: buffer-delete
@@ -182,24 +217,9 @@ call plug#end()
     nnoremap <leader>wk <C-w>k
     nnoremap <leader>wl <C-w>l
 
-    " nnoremap <C-h> <C-w>h
-    " nnoremap <C-j> <C-w>j
-    " nnoremap <C-k> <C-w>k
-    " nnoremap <C-l> <C-w>l
-
     " === tmux ===
     " Write all buffers before navigating from Vim to tmux pane
     let g:tmux_navigator_save_on_switch = 2
-
-    " === Vim terminal emulator ===
-    " Open a terminal 
-    nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://fish<CR>cd $VIM_DIR<CR>
-    " Move to normal mode in terminal
-    tnoremap <ESC> <C-\><C-n>
-
-    " === C++ ===
-    " Compile current file: compile
-    autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
 
     " === Nerd Tree ===
     " Toggle NERDTree: fi-letree
@@ -209,32 +229,45 @@ call plug#end()
 
     " === Goyo ===
     " Toggle Goyo: distraction-free
-    nnoremap <leader>df :Goyo<CR>
+    nnoremap <leader>df :Goyo<CR> 
+
+    " === Vim terminal emulator ===
+    " Open a terminal 
+    nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://zsh<CR>cd $VIM_DIR<CR>
+    " Move to normal mode in terminal
+    tnoremap <ESC> <C-\><C-n>
+
+    " === C++ ===
+    " Compile current file: compile
+    autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
 
     " === Misc ===
     " Remove highlighting after search: highlighting-off
     nnoremap <leader>ho :noh<CR>
     " Open this file: vim-options 
     nnoremap <leader>vo :e ~/.config/nvim/init.vim<CR>
+    " Reload config file 
+    nnoremap <C-s> :w<CR>:source ~/.config/nvim/init.vim<CR>
 
 " === Plugin Settings ===
     " === vim-airline ===
+    " Airline + Tabline
     let g:airline#extensions#tabline#enabled = 1
+    " Use fancy fonts
     let g:airline_powerline_fonts = 1
+    " Move statusline to the top - Good for Tmux as it has it's own line
     let g:airline_statusline_ontop=1
     let g:airline#extensions#whitespace#enabled = 0
-
-    let g:airline#extensions#ale#enabled = 1 " Airline + ale
-
-    " remove file encoding
+    " Airline + Ale
+    let g:airline#extensions#ale#enabled = 1 
+    " Remove file encoding
     let g:airline_section_y='' 
-    " remove line column number and simplify last section
+    " Remove line column number and simplify last section
     let g:airline_section_z = airline#section#create(['%3l:%3v'])
-
-    " remove separators for empty sections
+    " Remove separators for empty sections
     let g:airline_skip_empty_sections = 1
 
-    " Remove default statusline
+    " Remove vim's default ugly statusline that remains at the bottom
     " https://unix.stackexchange.com/questions/140898/vim-hide-status-line-in-the-bottom
     let s:hidden_all = 0
     function! TogglehiddenAll()
@@ -254,6 +287,7 @@ call plug#end()
     endfunction
     " statusline-hide
     nnoremap <leader>sh :call TogglehiddenAll()<CR>
+    " TODO: If hidden_all == 0 call TogglehiddenAll() on startup & GoyoEnter/Leave
 
     " === vim-airline-themes ===
     let g:airline_theme = 'minimalist' 
@@ -298,7 +332,7 @@ call plug#end()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
     " === auto-pairs ===
-    " This uses <leader> in insert mode giving bad UX
+    " This uses <leader> in insert mode making vim a stuttering mess 
     let g:AutoPairsMapSpace = "false"
 
     "" === vim-easytags ===

@@ -165,7 +165,7 @@ alias g++="g++-9"
 alias devtm="~/dotfiles/bin/dev-tmux.sh"
 
 # Aliases for cp
-alias cpenv="tmuxinator start compro"
+alias cpenv="cd ~/cp && tmuxinator start compro"
 alias cptm="cpenv"
 alias cptmux="cpenv"
 alias cpc="g++ -std=c++17 -Wall -Wextra -O2 main.cpp -o main.exe"
