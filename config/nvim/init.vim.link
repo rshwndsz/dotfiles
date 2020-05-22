@@ -13,12 +13,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
     Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
-    " Install coc-plugins with :CocInstall <plugin-name> 
-    " Install as required
-    " Ex: :CocInstall coc-snippets
-    " neoclide/coc-snippets 
-    " neoclide/coc-lists     
-    " neoclide/coc-json
 
 " === Tmux ===
     Plug 'christoomey/vim-tmux-navigator'             " Seamless navigation between tmux panes and vim splits
@@ -36,16 +30,13 @@ call plug#begin('~/.vim/plugged')
 
 call plug#end()
 
+
 " === General settings ===
     let g:python3_host_prog = '/usr/local/bin/python3' " Python for neovim
     set encoding=UTF-8
     set splitbelow     " Open horizontal splits at bottom
     set splitright     " Open vertical splits at right
-    " For coc.vim
-    set updatetime=300        " Having longer update times lead to poor UX
-    set shortmess+=c          " Don't pass messages to |ins-completion-menu|
-    set signcolumn=yes        " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-    set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
+
 
 " === Colorscheme ===
     if (has("termguicolors"))
@@ -55,11 +46,13 @@ call plug#end()
     colorscheme night-owl
     set cursorline " Highlighting that moves with the cursor
 
+
 " === Spacing & Indentation ===
     filetype plugin indent on
     set backspace=indent,eol,start confirm
     set shiftwidth=4 autoindent smartindent tabstop=4 softtabstop=4 expandtab
     set cmdheight=1
+
 
 " === Line Numbering ===
     set number
@@ -75,10 +68,12 @@ call plug#end()
       endif 
     endfunction 
 
+
 " === Folds ===
     set foldmethod=indent   " Fold based on indent
     set foldnestmax=3       " Deepest fold is 3 levels
     set nofoldenable        " Don't fold by default
+
 
 " === Fix annoyances ===
     " To auto-close the method-preview window
@@ -86,6 +81,7 @@ call plug#end()
     " Diable auto-comment
     " https://vim.fandom.com/wiki/Disable_automatic_comment_insertion
     autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 
 " === Searching ===
     " Ignorecase when searching
@@ -115,8 +111,10 @@ call plug#end()
     set wildignore+=tmp/**
     set wildignore+=*.png,*.jpg,*.gif
 
+
 " === Performance ===
     set lazyredraw " Fix slow scrolling that occurs when using mouse and relative numbers
+
 
 " === File Management ===
     set noswapfile
@@ -130,20 +128,30 @@ call plug#end()
     autocmd FileChangedShellPost *
     \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
+
 " === Scrolling ===
     set scrolloff=8 " Start scrolling when we're 8 lines away from margins
+
 
 " === Keyboard bindings ===
     let mapleader = " "
     :nmap <Space> :
     
+
     " === vim-easy-align ===
     " Start interactive EasyAlign in visual mode (e.g. vipga): get-aligned
     xmap ga <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
     
+
     " === coc.vim ===
+    " Settings
+    set updatetime=300        " Having longer update times lead to poor UX
+    set shortmess+=c          " Don't pass messages to |ins-completion-menu|
+    set signcolumn=yes        " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
+    set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
+
     " To make snippet completion work just like VSCode
     " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
     " <<< Install coc-snippets for this
@@ -166,13 +174,10 @@ call plug#end()
     " gd - go to definition of word under cursor
     nmap <silent> gd <Plug>(coc-definition)
     nmap <silent> gy <Plug>(coc-type-definition)
-
     " gi - go to implementation
     nmap <silent> gi <Plug>(coc-implementation)
-
     " gr - find references
     nmap <silent> gr <Plug>(coc-references)
-
     " gh - get hint on whatever's under the cursor
     nnoremap <silent> K :call <SID>show_documentation()<CR>
     nnoremap <silent> gh :call <SID>show_documentation()<CR>
@@ -184,24 +189,11 @@ call plug#end()
       endif
     endfunction
 
-    nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
-    nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
-    " List errors
-    nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<cr>
-    " List commands available in tsserver (and others)
-    nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
-    " Restart when tsserver gets wonky
-    nnoremap <silent> <leader>cR  :<C-u>CocRestart<CR>
-    nnoremap <silent> <leader>cl  :<C-u>CocList locationlist<CR>
-    " Manage extensions
-    nnoremap <silent> <leader>cx  :<C-u>CocList extensions<cr>
     " Rename the current word in the cursor
     nmap <leader>cr  <Plug>(coc-rename)
     nmap <leader>cf  <Plug>(coc-format-selected)
     vmap <leader>cf  <Plug>(coc-format-selected)
-    " Run code actions
-    vmap <leader>ca  <Plug>(coc-codeaction-selected)
-    nmap <leader>ca  <Plug>(coc-codeaction-selected)
+
 
     " === Some of my fav spacemacs bindings ===
     " Close buffer in focus: buffer-delete
@@ -217,9 +209,11 @@ call plug#end()
     nnoremap <leader>wk <C-w>k
     nnoremap <leader>wl <C-w>l
 
+
     " === tmux ===
     " Write all buffers before navigating from Vim to tmux pane
     let g:tmux_navigator_save_on_switch = 2
+
 
     " === Nerd Tree ===
     " Toggle NERDTree: fi-letree
@@ -227,9 +221,11 @@ call plug#end()
     " Close vim if only window left is NERDTree
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+
     " === Goyo ===
     " Toggle Goyo: distraction-free
     nnoremap <leader>df :Goyo<CR> 
+
 
     " === Vim terminal emulator ===
     " Open a terminal 
@@ -237,9 +233,11 @@ call plug#end()
     " Move to normal mode in terminal
     tnoremap <ESC> <C-\><C-n>
 
+
     " === C++ ===
     " Compile current file: compile
     autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
+
 
     " === Misc ===
     " Remove highlighting after search: highlighting-off
@@ -248,6 +246,7 @@ call plug#end()
     nnoremap <leader>vo :e ~/.config/nvim/init.vim<CR>
     " Reload config file 
     nnoremap <C-s> :w<CR>:source ~/.config/nvim/init.vim<CR>
+
 
 " === Plugin Settings ===
     " === vim-airline ===
@@ -292,6 +291,7 @@ call plug#end()
     " === vim-airline-themes ===
     let g:airline_theme = 'minimalist' 
 
+
     " === nerd-commenter ===
     " Add spaces after comment delimiters by default
     let g:NERDSpaceDelims = 1
@@ -310,8 +310,10 @@ call plug#end()
     " Enable NERDCommenterToggle to check all selected lines is commented or not 
     let g:NERDToggleCheckAllLines = 1
 
+
     " === nerd-tree ===
     let NERDTreeShowLineNumbers=0
+
 
     " === goyo ===
     let g:goyo_width='96%'
@@ -331,6 +333,7 @@ call plug#end()
     autocmd! User GoyoEnter nested call <SID>goyo_enter()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
+
     " === auto-pairs ===
     " This uses <leader> in insert mode making vim a stuttering mess 
     let g:AutoPairsMapSpace = "false"
@@ -341,6 +344,7 @@ call plug#end()
     "" Project specific tag files
     "set tags=./tags;
     "let g:easytags_dynamic_files=0
+
 
     " === ale ===
     " C++
@@ -354,7 +358,9 @@ call plug#end()
                 \'cpp': ['gcc', 'clang-tidy'],
                 \}
 
+
     " === coc-snippets ===
+    " Install using `:CocInstall coc-snippets`
     " https://github.com/neoclide/coc-snippets/issues/15#issuecomment-475891282
     " Use `:CocCommand snippets.ediSnippets` to open the snippet file for the current filetype
     " All snippets for the current filetype live there
