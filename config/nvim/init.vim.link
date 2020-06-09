@@ -1,18 +1,19 @@
 " My neovim config file
 
 call plug#begin('~/.vim/plugged')
+
 " === Visuals ===
     Plug 'vim-airline/vim-airline'                    " Lean & mean status/tabline for vim that's light as air
     Plug 'vim-airline/vim-airline-themes'             " Themes for vim-airline
     Plug 'crusoexia/vim-monokai'                      " Monokai colorscheme
     Plug 'haishanh/night-owl.vim'                     " Awesome Night-owl theme by Sarah Drasner
-    Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
-    Plug 'preservim/nerdtree'                         " A tree explorer for vim
+    Plug 'morhetz/gruvbox'                            " Retro groove color scheme for vim
 
 " === Brains ===
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
     Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
+    Plug 'sheerun/vim-polyglot'                       " A solid language pack for vim
 
 " === Tmux ===
     Plug 'christoomey/vim-tmux-navigator'             " Seamless navigation between tmux panes and vim splits
@@ -23,10 +24,15 @@ call plug#begin('~/.vim/plugged')
     "Plug 'xolox/vim-misc'                             " Required by vim-easytags
   
 " === Nice to haves ===
+    Plug 'preservim/nerdtree'                         " A tree explorer for vim
+    Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
     Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
     Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
     Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
+
+" === Language specific ===
+   Plug 'lervag/vimtex'                               " A modern vim plugin for editing tex files
 
 call plug#end()
 
@@ -38,19 +44,44 @@ call plug#end()
     set splitright     " Open vertical splits at right
 
 
-" === Colorscheme ===
+" === Visuals ===
     if (has("termguicolors"))
         set termguicolors
     endif
-    syntax enable
-    colorscheme night-owl
+    syntax enable  " Enable syntax highlighting
     set cursorline " Highlighting that moves with the cursor
+
+    " === Colorscheme ===
+    colorscheme gruvbox
+    " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
+    let g:gruvbox_contrast_dark="hard"
 
 
 " === Spacing & Indentation ===
-    filetype plugin indent on
+    " Most of the below from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+    " Enable filetype plugins
+    filetype plugin on
+    filetype indent on
+    " Configure backspace so it acts as it should act
     set backspace=indent,eol,start confirm
-    set shiftwidth=4 autoindent smartindent tabstop=4 softtabstop=4 expandtab
+    set whichwrap+=<,>,h,l
+    " Use spaces instead of tab
+    set expandtab
+    " Be smart when using tabs :)
+    set smarttab
+    " 1 tab <-> 4 spaces
+    set shiftwidth=4
+    set tabstop=4
+    " Linebreak on 500 characters
+    set lbr
+    set tw=500
+    " Auto indent
+    set ai
+    " Smart indent
+    set si
+    " Wrap lines
+    set wrap
+    " Height of the command bar
     set cmdheight=1
 
 
@@ -95,6 +126,7 @@ call plug#end()
     " Stuff to ignore when tab completing
     set wildoptions=pum
     set wildignore=*.o,*.obj,*~                                                     
+    set wildignore+=*.exe
     set wildignore+=*.git*
     set wildignore+=*.meteor*
     set wildignore+=*vim/backups*
@@ -135,6 +167,7 @@ call plug#end()
 
 " === Keyboard bindings ===
     let mapleader = " "
+    let maplocalleader = ","  " https://github.com/jalvesaq/Nvim-R/issues/101#issuecomment-242395913 
     :nmap <Space> :
     
 
@@ -216,8 +249,8 @@ call plug#end()
 
 
     " === Nerd Tree ===
-    " Toggle NERDTree: fi-letree
-    nnoremap <leader>fi :NERDTreeToggle<CR>
+    " Toggle NERDTree: file-tree
+    nnoremap <leader>ft :NERDTreeToggle<CR>
     " Close vim if only window left is NERDTree
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -250,7 +283,6 @@ call plug#end()
 
 " === Plugin Settings ===
     " === vim-airline ===
-    " Airline + Tabline
     let g:airline#extensions#tabline#enabled = 1
     " Use fancy fonts
     let g:airline_powerline_fonts = 1
@@ -338,6 +370,7 @@ call plug#end()
     " This uses <leader> in insert mode making vim a stuttering mess 
     let g:AutoPairsMapSpace = "false"
 
+
     "" === vim-easytags ===
     "let g:easytags_async = 1
     "let g:easytags_file = '~/.vim/tags'
@@ -364,4 +397,56 @@ call plug#end()
     " https://github.com/neoclide/coc-snippets/issues/15#issuecomment-475891282
     " Use `:CocCommand snippets.ediSnippets` to open the snippet file for the current filetype
     " All snippets for the current filetype live there
+
+    " === vim-tex ===
+    " Since neovim doesn't support the `--servername` option yet
+    " Install neovim-remote using `pip3 install neovim-remote`
+    " https://github.com/lervag/vimtex/wiki/introduction#neovim
+    let g:vimtex_compiler_progname = 'nvr'
+    let g:vimtex_view_general_viewer
+            \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+    let g:vimtex_view_general_options = '-r @line @pdf @tex'
+
+    " This adds a callback hook that updates Skim after compilation
+    let g:vimtex_compiler_callback_hooks = ['UpdateSkim']
+
+    function! UpdateSkim(status)
+        if !a:status | return | endif
+
+        let l:out = b:vimtex.out()
+        let l:tex = expand('%:p')
+        let l:cmd = [g:vimtex_view_general_viewer, '-r']
+
+        if !empty(system('pgrep Skim'))
+            call extend(l:cmd, ['-g'])
+        endif
+
+        if has('nvim')
+            call jobstart(l:cmd + [line('.'), l:out, l:tex])
+        elseif has('job')
+            call job_start(l:cmd + [line('.'), l:out, l:tex])
+        else
+            call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
+        endif
+    endfunction
+
+    " Ignore certain warnings
+    let g:Tex_IgnoredWarnings = 
+        \'Underfull'."\n".
+        \'Overfull'."\n".
+        \'specifier changed to'."\n".
+        \'You have requested'."\n".
+        \'Missing number, treated as zero.'."\n".
+        \'There were undefined references'."\n".
+        \'Citation %.%# undefined'."\n".
+        \'Double space found.'."\n"
+    let g:Tex_IgnoreLevel = 8
+
+    let g:vimtex_quickfix_latexlog = {
+      \ 'overfull' : 0,
+      \ 'underfull' : 0,
+      \ 'packages' : {
+      \   'default' : 0,
+      \ },
+      \}
 
