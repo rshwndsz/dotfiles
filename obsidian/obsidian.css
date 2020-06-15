@@ -76,7 +76,7 @@
     --inline-code:                var(--bright-blue);
     --code-block:                 var(--bright-blue);
     --vim-cursor:                 var(--bright-orange);
-    --text-selection:             var(--dark3);
+    --text-selection:             rgba(102, 92, 84, 0.1);
 }
 
 .theme-light
@@ -127,16 +127,6 @@
 {
     color: var(--text-a-hover) !important;
 }
-/*
-.graph-view.color-fill
-{
-    color: var(--background-secondary);
-}
-.graph-view.color-line
-{
-  color: var(--background-modifier-border);
-}
-*/
 
 html,
 body

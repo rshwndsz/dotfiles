@@ -9,6 +9,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'haishanh/night-owl.vim'                     " Awesome Night-owl theme by Sarah Drasner
     Plug 'morhetz/gruvbox'                            " Retro groove color scheme for vim
     Plug 'crusoexia/vim-monokai'                      " Refined Monokai color scheme for Vim, inspired by Sublime text
+    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
 
 " === Brains ===
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
@@ -55,7 +56,7 @@ call plug#end()
     " === Colorscheme ===
     colorscheme gruvbox
     " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
-    let g:gruvbox_contrast_dark="hard"
+    let g:gruvbox_contrast_dark="medium"
 
 
 " === Spacing & Indentation ===
