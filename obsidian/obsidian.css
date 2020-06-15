@@ -1,7 +1,7 @@
 
 :root
 {
-	--font-UI: 'iA Writer Quattro V', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-UI: 'iA Writer Quattro V', 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     --dark0-hard:     #1d2021;
     --dark0:          #282828;
     --dark0-soft:     #32302f;
@@ -46,7 +46,7 @@
 }
 
 .theme-dark, .theme-light {
-	--font-monospace: 'Fira Code', 'IBM Plex Mono', monospace;
+    --font-monospace: 'Fira Code', 'IBM Plex Mono', monospace;
 }
 
 .theme-dark
