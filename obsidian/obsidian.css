@@ -76,7 +76,7 @@
     --inline-code:                var(--bright-blue);
     --code-block:                 var(--bright-blue);
     --vim-cursor:                 var(--bright-orange);
-    --text-selection:             rgba(102, 92, 84, 0.1);
+    --text-selection:             rgba(102, 92, 84, 0.25);
 }
 
 .theme-light
@@ -105,7 +105,7 @@
     --interactive-accent-rgb:     var(--neutral-orange);
     --inline-code:                var(--neutral-blue);
     --vim-cursor:                 var(--neutral-orange);
-    --text-selection:             var(--light2);
+    --text-selection:             rgba(213, 196, 161, 0.25);
 }
 
 .theme-dark code[class*="language-"],
