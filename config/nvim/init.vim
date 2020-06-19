@@ -441,8 +441,10 @@ call plug#end()
         \'Missing number, treated as zero.'."\n".
         \'There were undefined references'."\n".
         \'Citation %.%# undefined'."\n".
-        \'Double space found.'."\n"
-    let g:Tex_IgnoreLevel = 8
+        \'Double space found.'."\n".
+        \'Wrong length of dash may have been used. (8)'."\n"
+
+    let g:Tex_IgnoreLevel = 8 
 
     let g:vimtex_quickfix_latexlog = {
       \ 'overfull' : 0,
