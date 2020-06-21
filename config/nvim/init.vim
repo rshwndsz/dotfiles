@@ -74,6 +74,8 @@ call plug#end()
     " 1 tab <-> 4 spaces
     set shiftwidth=4
     set tabstop=4
+    " For JavaScript
+    autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
     " Linebreak on 500 characters
     set lbr
     set tw=500
