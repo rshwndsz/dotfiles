@@ -184,3 +184,6 @@ export EDITOR=nvim
 autoload -U promptinit; promptinit
 prompt pure
 
+# Backup obsidian on GitHub
+alias bakobsidian="bash ~/dotfiles/bin/backup-obsidian.sh"
+
