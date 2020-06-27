@@ -16,6 +16,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
     Plug 'sheerun/vim-polyglot'                       " A solid language pack for vim
+    Plug 'lervag/vimtex'                              " A modern vim plugin for editing tex files
 
 " === Tmux ===
     Plug 'christoomey/vim-tmux-navigator'             " Seamless navigation between tmux panes and vim splits
@@ -31,10 +32,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
     Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
-    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
-
-" === Language specific ===
-   Plug 'lervag/vimtex'                               " A modern vim plugin for editing tex files
 
 call plug#end()
 
