@@ -5,11 +5,13 @@ call plug#begin('~/.vim/plugged')
 " === Visuals ===
     Plug 'vim-airline/vim-airline'                    " Lean & mean status/tabline for vim that's light as air
     Plug 'vim-airline/vim-airline-themes'             " Themes for vim-airline
-    Plug 'crusoexia/vim-monokai'                      " Monokai colorscheme
+    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
+
+" === Themes ===
+    Plug 'crusoexia/vim-monokai'                      " Refined Monokai color scheme for Vim, inspired by Sublime text
     Plug 'haishanh/night-owl.vim'                     " Awesome Night-owl theme by Sarah Drasner
     Plug 'morhetz/gruvbox'                            " Retro groove color scheme for vim
-    Plug 'crusoexia/vim-monokai'                      " Refined Monokai color scheme for Vim, inspired by Sublime text
-    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
+    Plug 'joshdick/onedark.vim'                       " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
 
 " === Brains ===
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
@@ -28,6 +30,7 @@ call plug#begin('~/.vim/plugged')
   
 " === Nice to haves ===
     Plug 'preservim/nerdtree'                         " A tree explorer for vim
+    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
     Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
     Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
@@ -51,9 +54,16 @@ call plug#end()
     set cursorline " Highlighting that moves with the cursor
 
     " === Colorscheme ===
-    colorscheme gruvbox
-    " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
-    let g:gruvbox_contrast_dark="medium"
+    " ONEDARK
+    colorscheme onedark
+
+    " GRUVBOX
+    " colorscheme gruvbox
+    " " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
+    " let g:gruvbox_contrast_dark="medium"
+
+    " MONOKAI
+    " colorscheme monokai
 
 
 " === Spacing & Indentation ===
@@ -452,4 +462,16 @@ call plug#end()
       \   'default' : 0,
       \ },
       \}
+
+    " XeLateX
+    " https://tex.stackexchange.com/a/510684
+    let g:vimtex_compiler_latexmk = { 
+                \ 'executable' : 'latexmk',
+                \ 'options' : [ 
+                \   '-xelatex',
+                \   '-file-line-error',
+                \   '-synctex=1',
+                \   '-interaction=nonstopmode',
+                \ ],
+                \}
 
