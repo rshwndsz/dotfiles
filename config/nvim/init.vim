@@ -2,10 +2,9 @@
 
 call plug#begin('~/.vim/plugged')
 
-" === Visuals ===
+" === Editor visuals ===
     Plug 'vim-airline/vim-airline'                    " Lean & mean status/tabline for vim that's light as air
     Plug 'vim-airline/vim-airline-themes'             " Themes for vim-airline
-    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
 
 " === Themes ===
     Plug 'crusoexia/vim-monokai'                      " Refined Monokai color scheme for Vim, inspired by Sublime text
@@ -28,13 +27,16 @@ call plug#begin('~/.vim/plugged')
     "Plug 'xolox/vim-easytags'                         " Syntax highlighting and tag generation 
     "Plug 'xolox/vim-misc'                             " Required by vim-easytags
   
-" === Nice to haves ===
-    Plug 'preservim/nerdtree'                         " A tree explorer for vim
-    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
-    Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
+" === Shortcuts for common stuff ===
+    Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
     Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
-    Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
+
+" === Nice to haves ===
+    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
+    Plug 'preservim/nerdtree'                         " A tree explorer for vim
+    Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
+    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
 
 call plug#end()
 
@@ -67,25 +69,17 @@ call plug#end()
 
 
 " === Spacing & Indentation ===
-    " Most of the below from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+    " Adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
     " Enable filetype plugins
     filetype plugin on
     filetype indent on
     " Configure backspace so it acts as it should act
     set backspace=indent,eol,start confirm
     set whichwrap+=<,>,h,l
-    " Use spaces instead of tab
-    set expandtab
-    " Be smart when using tabs :)
-    set smarttab
-    " 1 tab <-> 4 spaces
-    set shiftwidth=4
-    set tabstop=4
-    " For JavaScript
-    autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
+
     " Linebreak on 500 characters
     set lbr
-    set tw=500
+    set tw=250
     " Auto indent
     set ai
     " Smart indent
@@ -94,6 +88,15 @@ call plug#end()
     set wrap
     " Height of the command bar
     set cmdheight=1
+    " Use spaces instead of tab
+    set expandtab
+    " Be smart when using tabs :)
+    set smarttab
+    " 1 tab <-> 4 spaces
+    set shiftwidth=4
+    set tabstop=4
+    " 1 tab <-> 2 spaces for JavaScript
+    autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
 
 
 " === Line Numbering ===
@@ -198,7 +201,7 @@ call plug#end()
 
     " To make snippet completion work just like VSCode
     " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
-    " <<< Install coc-snippets for this
+    " <<< NOTE: Install coc-snippets with `:CocInstall coc-snippets` for this to work
     inoremap <silent><expr> <TAB>
           \ pumvisible() ? coc#_select_confirm() :
           \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
@@ -209,6 +212,7 @@ call plug#end()
       return !col || getline('.')[col - 1]  =~# '\s'
     endfunction
 
+    " <<< NOTE: Use <C-n> & <C-p> to move to next suggestion for tab-complete
     let g:coc_snippet_next = '<tab>'
 
     " Close preview window when completion is done
@@ -240,11 +244,14 @@ call plug#end()
 
 
     " === Some of my fav spacemacs bindings ===
-    " Close buffer in focus: buffer-delete
+    " Close buffer in focus
+    " bd - buffer-delete
     nnoremap <leader>bd <C-w>q
     nnoremap <leader>bn :w<CR>:bn<CR> 
     " Splits
+    " vs - vertical-split
     nnoremap <leader>vs :vsplit<CR>
+    " hs - horizontal-split
     nnoremap <leader>hs :split<CR>
 
     " Move between buffers
@@ -260,18 +267,21 @@ call plug#end()
 
 
     " === Nerd Tree ===
-    " Toggle NERDTree: file-tree
+    " Toggle NERDTree ON or OFF
+    " ft - file-tree
     nnoremap <leader>ft :NERDTreeToggle<CR>
     " Close vim if only window left is NERDTree
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
     " === Goyo ===
-    " Toggle Goyo: distraction-free
+    " Toggle Goyo ON or OFF
+    " df - distraction-free
     nnoremap <leader>df :Goyo<CR> 
 
 
     " === Vim terminal emulator ===
+    " <<< NOTE: Use `tmux` with `tmuxinator` for best terminal + vim experience
     " Open a terminal 
     nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://zsh<CR>cd $VIM_DIR<CR>
     " Move to normal mode in terminal
@@ -327,7 +337,7 @@ call plug#end()
             set showcmd
         endif
     endfunction
-    " statusline-hide
+    " sh - statusline-hide
     nnoremap <leader>sh :call TogglehiddenAll()<CR>
     " TODO: If hidden_all == 0 call TogglehiddenAll() on startup & GoyoEnter/Leave
 
@@ -355,6 +365,7 @@ call plug#end()
 
 
     " === nerd-tree ===
+    " Don't show line numbers in file tree - Doesn't work sometimes though
     let NERDTreeShowLineNumbers=0
 
 
@@ -406,8 +417,9 @@ call plug#end()
     " === coc-snippets ===
     " Install using `:CocInstall coc-snippets`
     " https://github.com/neoclide/coc-snippets/issues/15#issuecomment-475891282
-    " Use `:CocCommand snippets.ediSnippets` to open the snippet file for the current filetype
-    " All snippets for the current filetype live there
+    " <<< NOTE: Use `:CocCommand snippets.ediSnippets` to open the snippet file for the current filetype
+    " <<<       All snippets for the current filetype live there
+
 
     " === vim-tex ===
     " Since neovim doesn't support the `--servername` option yet
@@ -452,7 +464,6 @@ call plug#end()
         \'Citation %.%# undefined'."\n".
         \'Double space found.'."\n".
         \'Wrong length of dash may have been used. (8)'."\n"
-
     let g:Tex_IgnoreLevel = 8 
 
     let g:vimtex_quickfix_latexlog = {
