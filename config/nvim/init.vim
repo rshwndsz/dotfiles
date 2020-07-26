@@ -463,6 +463,7 @@ call plug#end()
         \'There were undefined references'."\n".
         \'Citation %.%# undefined'."\n".
         \'Double space found.'."\n".
+        \'Possible unwanted space'."\n".
         \'Wrong length of dash may have been used. (8)'."\n"
     let g:Tex_IgnoreLevel = 8 
 
