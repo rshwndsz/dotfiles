@@ -16,6 +16,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
     Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
+
+" === Language-specific ===
     Plug 'sheerun/vim-polyglot'                       " A solid language pack for vim
     Plug 'lervag/vimtex'                              " A modern vim plugin for editing tex files
 
@@ -30,11 +32,10 @@ call plug#begin('~/.vim/plugged')
 " === Shortcuts for common stuff ===
     Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
     Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
+    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
     Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
 
 " === Nice to haves ===
-    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
-    Plug 'preservim/nerdtree'                         " A tree explorer for vim
     Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
     Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
 
@@ -95,6 +96,8 @@ call plug#end()
     " 1 tab <-> 4 spaces
     set shiftwidth=4
     set tabstop=4
+    " === Language-specific ===
+    " TODO: Find a better way
     " 1 tab <-> 2 spaces for JavaScript
     autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
 
