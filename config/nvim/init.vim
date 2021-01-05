@@ -3,26 +3,27 @@
 call plug#begin('~/.vim/plugged')
 
 " === Editor visuals ===
-    Plug 'vim-airline/vim-airline'                    " Lean & mean status/tabline for vim that's light as air
-    Plug 'vim-airline/vim-airline-themes'             " Themes for vim-airline
+    Plug 'vim-airline/vim-airline'                     " Lean & mean status/tabline for vim that's light as air
+    Plug 'vim-airline/vim-airline-themes'              " Themes for vim-airline
 
 " === Themes ===
-    Plug 'crusoexia/vim-monokai'                      " Refined Monokai color scheme for Vim, inspired by Sublime text
-    Plug 'haishanh/night-owl.vim'                     " Awesome Night-owl theme by Sarah Drasner
-    Plug 'morhetz/gruvbox'                            " Retro groove color scheme for vim
-    Plug 'joshdick/onedark.vim'                       " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
+    Plug 'crusoexia/vim-monokai'                       " Refined Monokai color scheme for Vim, inspired by Sublime text
+    Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
+    Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
+    Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
 
 " === Brains ===
-    Plug 'ctrlpvim/ctrlp.vim'                         " Fuzzy file, buffer, mru, tag, etc. finder
-    Plug 'dense-analysis/ale'                         " Asynchronous linting and syntax checking
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
+    Plug 'ctrlpvim/ctrlp.vim'                          " Fuzzy file, buffer, mru, tag, etc. finder
+    Plug 'dense-analysis/ale'                          " Asynchronous linting and syntax checking
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
 
 " === Language-specific ===
-    Plug 'sheerun/vim-polyglot'                       " A solid language pack for vim
-    Plug 'lervag/vimtex'                              " A modern vim plugin for editing tex files
+    " Plug 'lervag/vimtex'                               " A modern vim plugin for editing tex files
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
+    Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
 
 " === Tmux ===
-    Plug 'christoomey/vim-tmux-navigator'             " Seamless navigation between tmux panes and vim splits
+    Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
 
 " === Tags ===
     "Plug 'ludovicchabant/vim-gutentags'               " A vim plugin that manages your tag files
@@ -269,12 +270,12 @@ call plug#end()
     let g:tmux_navigator_save_on_switch = 2
 
 
-    " === Nerd Tree ===
-    " Toggle NERDTree ON or OFF
-    " ft - file-tree
-    nnoremap <leader>ft :NERDTreeToggle<CR>
-    " Close vim if only window left is NERDTree
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    " " === Nerd Tree ===
+    " " Toggle NERDTree ON or OFF
+    " " ft - file-tree
+    " nnoremap <leader>ft :NERDTreeToggle<CR>
+    " " Close vim if only window left is NERDTree
+    " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 
     " === Goyo ===
@@ -283,17 +284,23 @@ call plug#end()
     nnoremap <leader>df :Goyo<CR> 
 
 
-    " === Vim terminal emulator ===
-    " <<< NOTE: Use `tmux` with `tmuxinator` for best terminal + vim experience
-    " Open a terminal 
-    nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://zsh<CR>cd $VIM_DIR<CR>
-    " Move to normal mode in terminal
-    tnoremap <ESC> <C-\><C-n>
+    " " === Vim terminal emulator ===
+    " " <<< NOTE: Use `tmux` with `tmuxinator` for best terminal + vim experience
+    " " Open a terminal
+    " nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://zsh<CR>cd $VIM_DIR<CR>
+    " " Move to normal mode in terminal
+    " tnoremap <ESC> <C-\><C-n>
 
 
     " === C++ ===
     " Compile current file: compile
     autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
+    
+
+    " " === Go ===
+    " See - https://tpaschalis.github.io/vim-go-setup/
+    let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
+    let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
 
 
     " === Misc ===
@@ -424,69 +431,69 @@ call plug#end()
     " <<<       All snippets for the current filetype live there
 
 
-    " === vim-tex ===
-    " Since neovim doesn't support the `--servername` option yet
-    " Install neovim-remote using `pip3 install neovim-remote`
-    " https://github.com/lervag/vimtex/wiki/introduction#neovim
-    let g:vimtex_compiler_progname = 'nvr'
-    let g:vimtex_view_general_viewer
-            \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-    let g:vimtex_view_general_options = '-r @line @pdf @tex'
-
-    " This adds a callback hook that updates Skim after compilation
-    let g:vimtex_compiler_callback_hooks = ['UpdateSkim']
-
-    function! UpdateSkim(status)
-        if !a:status | return | endif
-
-        let l:out = b:vimtex.out()
-        let l:tex = expand('%:p')
-        let l:cmd = [g:vimtex_view_general_viewer, '-r']
-
-        if !empty(system('pgrep Skim'))
-            call extend(l:cmd, ['-g'])
-        endif
-
-        if has('nvim')
-            call jobstart(l:cmd + [line('.'), l:out, l:tex])
-        elseif has('job')
-            call job_start(l:cmd + [line('.'), l:out, l:tex])
-        else
-            call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
-        endif
-    endfunction
-
-    " Ignore certain warnings
-    let g:Tex_IgnoredWarnings = 
-        \'Underfull'."\n".
-        \'Overfull'."\n".
-        \'specifier changed to'."\n".
-        \'You have requested'."\n".
-        \'Missing number, treated as zero.'."\n".
-        \'There were undefined references'."\n".
-        \'Citation %.%# undefined'."\n".
-        \'Double space found.'."\n".
-        \'Possible unwanted space'."\n".
-        \'Wrong length of dash may have been used. (8)'."\n"
-    let g:Tex_IgnoreLevel = 8 
-
-    let g:vimtex_quickfix_latexlog = {
-      \ 'overfull' : 0,
-      \ 'underfull' : 0,
-      \ 'packages' : {
-      \   'default' : 0,
-      \ },
-      \}
-
-    " XeLateX
-    " https://tex.stackexchange.com/a/510684
-    let g:vimtex_compiler_latexmk = { 
-                \ 'executable' : 'latexmk',
-                \ 'options' : [ 
-                \   '-xelatex',
-                \   '-file-line-error',
-                \   '-synctex=1',
-                \   '-interaction=nonstopmode',
-                \ ],
-                \}
-
+    " " === vim-tex ===
+    " " Since neovim doesn't support the `--servername` option yet
+    " " Install neovim-remote using `pip3 install neovim-remote`
+    " " https://github.com/lervag/vimtex/wiki/introduction#neovim
+    " let g:vimtex_compiler_progname = 'nvr'
+    " let g:vimtex_view_general_viewer
+    "         \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+    " let g:vimtex_view_general_options = '-r @line @pdf @tex'
+    "
+    " " This adds a callback hook that updates Skim after compilation
+    " let g:vimtex_compiler_callback_hooks = ['UpdateSkim']
+    "
+    " function! UpdateSkim(status)
+    "     if !a:status | return | endif
+    "
+    "     let l:out = b:vimtex.out()
+    "     let l:tex = expand('%:p')
+    "     let l:cmd = [g:vimtex_view_general_viewer, '-r']
+    "
+    "     if !empty(system('pgrep Skim'))
+    "         call extend(l:cmd, ['-g'])
+    "     endif
+    "
+    "     if has('nvim')
+    "         call jobstart(l:cmd + [line('.'), l:out, l:tex])
+    "     elseif has('job')
+    "         call job_start(l:cmd + [line('.'), l:out, l:tex])
+    "     else
+    "         call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
+    "     endif
+    " endfunction
+    "
+    " " Ignore certain warnings
+    " let g:Tex_IgnoredWarnings =
+    "     \'Underfull'."\n".
+    "     \'Overfull'."\n".
+    "     \'specifier changed to'."\n".
+    "     \'You have requested'."\n".
+    "     \'Missing number, treated as zero.'."\n".
+    "     \'There were undefined references'."\n".
+    "     \'Citation %.%# undefined'."\n".
+    "     \'Double space found.'."\n".
+    "     \'Possible unwanted space'."\n".
+    "     \'Wrong length of dash may have been used. (8)'."\n"
+    " let g:Tex_IgnoreLevel = 8
+    "
+    " let g:vimtex_quickfix_latexlog = {
+    "   \ 'overfull' : 0,
+    "   \ 'underfull' : 0,
+    "   \ 'packages' : {
+    "   \   'default' : 0,
+    "   \ },
+    "   \}
+    "
+    " " XeLateX
+    " " https://tex.stackexchange.com/a/510684
+    " let g:vimtex_compiler_latexmk = {
+    "             \ 'executable' : 'latexmk',
+    "             \ 'options' : [
+    "             \   '-xelatex',
+    "             \   '-file-line-error',
+    "             \   '-synctex=1',
+    "             \   '-interaction=nonstopmode',
+    "             \ ],
+    "             \}
+    "

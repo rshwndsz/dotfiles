@@ -4,6 +4,8 @@
 # You can refer to the official documentation:
 # https://espanso.org/docs/
 
+show_icon: false
+
 # Matches are the substitution rules, when you type the "trigger" string
 # it gets replaced by the "replace" string.
 matches:
@@ -29,23 +31,22 @@ matches:
         params:
           format: "%I:%M %p"
 
-
   - trigger: ":journal"
     replace: "# {{jdate}}\n#log/{{jyear}}/{{jmonth}}/{{jday}}\n\n"
     vars:
       - name: jdate
-        type: date 
-        params: 
+        type: date
+        params:
           format: "%d %B, %Y"
       - name: jyear
         type: date
-        params: 
+        params:
           format: "%Y"
-      - name: jmonth 
+      - name: jmonth
         type: date
         params:
           format: "%m"
-      - name: jday 
+      - name: jday
         type: date
         params:
           format: "%d"
