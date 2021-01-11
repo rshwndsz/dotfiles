@@ -1,0 +1,19 @@
+.theme-dark {
+    --font-family-editor: "Jetbrains Mono", monospace;
+    --font-family-preview: "Inter";
+}
+
+a,
+.internal-link,
+.cm-hmd-internal-link,
+.cm-link,
+.cm-formatting-link
+{
+    font-family: var(--font-family-editor) !important;
+}
+
+
+code
+{
+  font-family: var(--font-family-editor);
+}

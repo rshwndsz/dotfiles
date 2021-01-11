@@ -1,0 +1,33 @@
+.tag {
+    background-color: #000;
+    padding: 2px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0px 0px;
+    cursor: pointer;
+    border-radius: 14px;
+}
+.tag:hover {
+    color: white;
+    background-color: #1C1C1C;
+}
+
+.cm-hashtag-begin {
+    color: rgba(var(--text-link), 1) !important;
+    text-decoration: none !important;
+}
+.cm-hashtag-end {
+    color: rgba(var(--text-link), 0.8) !important;
+    text-decoration: none !important;
+    border-bottom: rgba(var(--text-link), 0.5) 0.08em solid;
+}
+.cm-hashtag-begin:hover {
+    color: rgba(var(--text-link), 1) !important;
+    font-weight: 600 !important;
+}
+.cm-hashtag-end:hover {
+    color: rgba(var(--text-link), 1) !important;
+    font-weight: 600 !important;
+    border-bottom: rgba(var(--text-link), 1) 0.125em solid;
+}

@@ -1,0 +1,50 @@
+a:not(.internal-link) {
+    font-style: normal;
+    text-decoration: none;
+}
+
+a.tag {
+    color: var(--text-link) !important;
+}
+
+a.external-link {
+/* Underlines for links - 50% opacity makes it easy on the eyes */
+    color: rgba(153, 153, 153, 1) !important;
+    text-decoration: none;
+    border-bottom: rgba(153, 153, 153, 0.5) 0.08em solid;
+
+/* Remove the dirty svg after every external link  */
+    background-position: none;
+    background-repeat: none;
+    background-image: none;
+    background-size: 0px;
+    padding-right: 0px;
+    background-position-y: 0px;
+}
+.cm-url {
+    text-decoration: none !important;
+    border-bottom:  rgba(153, 153, 153, 0.5) 0.08em solid;
+}
+.cm-url:hover {
+    font-weight: 600;
+    border-bottom:  rgba(153, 153, 153, 1) 0.125em solid;
+}
+
+
+.cm-hmd-internal-link {
+    text-decoration: none !important;
+    border-bottom: rgba(var(--text-a), 0.5) 0.08em solid;
+}
+.cm-hmd-internal-link:hover {
+    font-weight: 600; 
+    border-bottom: rgba(var(--text-a), 1) 0.125em solid;
+}
+a.internal-link {
+    text-decoration: none;
+    border-bottom: rgba(var(--text-a), 0.5) 0.08em solid;
+}
+a.internal-link:hover {
+    color: rgba(var(--text-a), 1) !important;
+    font-weight: 600;
+    border-bottom: rgba(var(--text-a), 1) 0.125em solid;
+}

@@ -59,7 +59,7 @@ call plug#end()
 
     " === Colorscheme ===
     " ONEDARK
-    colorscheme onedark
+    " colorscheme onedark
 
     " GRUVBOX
     " colorscheme gruvbox
@@ -67,7 +67,7 @@ call plug#end()
     " let g:gruvbox_contrast_dark="medium"
 
     " MONOKAI
-    " colorscheme monokai
+    colorscheme monokai
 
 
 " === Spacing & Indentation ===
@@ -349,7 +349,8 @@ call plug#end()
     endfunction
     " sh - statusline-hide
     nnoremap <leader>sh :call TogglehiddenAll()<CR>
-    " TODO: If hidden_all == 0 call TogglehiddenAll() on startup & GoyoEnter/Leave
+    " Refer https://stackoverflow.com/a/6821698
+    autocmd VimEnter * call TogglehiddenAll()
 
     " === vim-airline-themes ===
     let g:airline_theme = 'minimalist' 

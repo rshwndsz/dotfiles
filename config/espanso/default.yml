@@ -22,6 +22,14 @@ matches:
         params:
           format: "%d %B, %Y"
 
+  - trigger: ":dtag"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "[[%Y-%m-%d]]"
+
   # Time
   - trigger: ":time"
     replace: "{{mytime}}"
