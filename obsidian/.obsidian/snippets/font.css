@@ -1,3 +1,7 @@
+:root {
+    --font-editor-size: 11pt !important;
+}
+
 .theme-dark {
     --font-family-editor: "Jetbrains Mono", monospace;
     --font-family-preview: "Inter";

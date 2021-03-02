@@ -1,54 +1,41 @@
 " My neovim config file
-
 call plug#begin('~/.vim/plugged')
+" === Brains ===
+    Plug 'dense-analysis/ale'                          " Asynchronous linting and syntax checking
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
+                                                       " Also install coc-snippets, coc-jedi using :CocInstall <package>
+    Plug 'ctrlpvim/ctrlp.vim'                          " Fuzzy file, buffer, mru, tag, etc. finder
+    Plug 'ludovicchabant/vim-gutentags'                " A Vim plugin that manages your tag files
 
-" === Editor visuals ===
-    Plug 'vim-airline/vim-airline'                     " Lean & mean status/tabline for vim that's light as air
-    Plug 'vim-airline/vim-airline-themes'              " Themes for vim-airline
+" === Language-specific ===
+    Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
+    Plug 'Vimjas/vim-python-pep8-indent'               " A nicer python indentation style for Vim
+    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
 
-" === Themes ===
-    Plug 'crusoexia/vim-monokai'                       " Refined Monokai color scheme for Vim, inspired by Sublime text
+" === Shortcuts ===
+    Plug 'tpope/vim-fugitive'                          " A Git wrapper awesome, it should be illegal
+    Plug 'tpope/vim-surround'                          " Quoting / parenthesizing made simple
+    Plug 'tpope/vim-commentary'                        " Comment out stuff: gcc to comment a line; gc<motion> for magic
+    Plug 'jiangmiao/auto-pairs'                        " Vim plugin to insert or delete brackets, parens, quotes in air
+    Plug 'junegunn/vim-easy-align'                     " Simple, easy-to-use vim-alignment plugin
+
+" === Visuals ===
+    Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
+    Plug 'itchyny/lightline.vim'                       " Lightweight statusline
+    Plug 'mengelbrecht/lightline-bufferline'           " ...display the list of buffers in the lightline vim plugin
+    Plug 'ap/vim-css-color'                            " Preview colours in source code while editing
+    Plug 'sickill/vim-monokai'                         " Refined Monokai color scheme for Vim, inspired by Sublime text
     Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
     Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
     Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
-
-" === Brains ===
-    Plug 'ctrlpvim/ctrlp.vim'                          " Fuzzy file, buffer, mru, tag, etc. finder
-    Plug 'dense-analysis/ale'                          " Asynchronous linting and syntax checking
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
-
-" === Language-specific ===
-    " Plug 'lervag/vimtex'                               " A modern vim plugin for editing tex files
-    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
-    Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
-
-" === Tmux ===
-    Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
-
-" === Tags ===
-    "Plug 'ludovicchabant/vim-gutentags'               " A vim plugin that manages your tag files
-    "Plug 'xolox/vim-easytags'                         " Syntax highlighting and tag generation 
-    "Plug 'xolox/vim-misc'                             " Required by vim-easytags
-  
-" === Shortcuts for common stuff ===
-    Plug 'tpope/vim-surround'                         " Quoting / parenthesizing made simple
-    Plug 'jiangmiao/auto-pairs'                       " Vim plugin to insert or delete brackets, parens, quotes in air
-    Plug 'preservim/nerdcommenter'                    " Vim plugin for intensely nerdy commenting powers
-    Plug 'junegunn/vim-easy-align'                    " Simple, easy-to-use vim-alignment plugin
-
-" === Nice to haves ===
-    Plug 'junegunn/goyo.vim'                          " Distraction free writing in vim
-    Plug 'ap/vim-css-color'                           " Preview colours in source code while editing
-
+    " Plug 'ryanoasis/vim-devicons'                      " Adds filetype icons to vim plugins
 call plug#end()
-
 
 " === General settings ===
     let g:python3_host_prog = '/usr/local/bin/python3' " Python for neovim
     set encoding=UTF-8
-    set splitbelow     " Open horizontal splits at bottom
-    set splitright     " Open vertical splits at right
-
+    set splitbelow                                     " Open horizontal splits at bottom
+    set splitright                                     " Open vertical splits at right
 
 " === Visuals ===
     if (has("termguicolors"))
@@ -59,16 +46,15 @@ call plug#end()
 
     " === Colorscheme ===
     " ONEDARK
-    " colorscheme onedark
+    colorscheme onedark
 
     " GRUVBOX
+    " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
     " colorscheme gruvbox
-    " " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
     " let g:gruvbox_contrast_dark="medium"
 
     " MONOKAI
-    colorscheme monokai
-
+    " colorscheme monokai
 
 " === Spacing & Indentation ===
     " Adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -102,7 +88,6 @@ call plug#end()
     " 1 tab <-> 2 spaces for JavaScript
     autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
 
-
 " === Line Numbering ===
     set number
     " Toggle relative numbering, and set to absolute on loss of focus or insert mode
@@ -117,22 +102,12 @@ call plug#end()
       endif 
     endfunction 
 
-
 " === Folds ===
     set foldmethod=indent   " Fold based on indent
     set foldnestmax=3       " Deepest fold is 3 levels
     set nofoldenable        " Don't fold by default
 
-
-" === Fix annoyances ===
-    " To auto-close the method-preview window
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-    " Diable auto-comment
-    " https://vim.fandom.com/wiki/Disable_automatic_comment_insertion
-    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-
-" === Searching ===
+" === Search & Replace ===
     " Ignorecase when searching
     set ignorecase
     " Incremental search - Vim starts searching when we start typing
@@ -141,6 +116,12 @@ call plug#end()
     set smartcase
     " Highlight search results
     set hlsearch
+    " Remove highlighting after search: highlighting-off
+    nnoremap <leader>ho :nohlsearch<CR>
+    " Live feedback while replacing text
+    " https://dev.to/waylonwalker/live-substitution-in-neovim-5e34
+    set inccommand=nosplit
+
     " Stuff to ignore when tab completing
     set wildoptions=pum
     set wildignore=*.o,*.obj,*~                                                     
@@ -152,19 +133,10 @@ call plug#end()
     set wildignore+=*mypy_cache*
     set wildignore+=*__pycache__*
     set wildignore+=*cache*
-    set wildignore+=*logs*
     set wildignore+=*node_modules*
     set wildignore+=**/node_modules/**
     set wildignore+=*DS_Store*
     set wildignore+=*.gem
-    set wildignore+=log/**
-    set wildignore+=tmp/**
-    set wildignore+=*.png,*.jpg,*.gif
-
-
-" === Performance ===
-    set lazyredraw " Fix slow scrolling that occurs when using mouse and relative numbers
-
 
 " === File Management ===
     set noswapfile
@@ -178,74 +150,30 @@ call plug#end()
     autocmd FileChangedShellPost *
     \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
 
-
 " === Scrolling ===
     set scrolloff=8 " Start scrolling when we're 8 lines away from margins
 
+" === Performance ===
+    set lazyredraw " Fix slow scrolling that occurs when using mouse and relative numbers
+
+" === Fix annoyances ===
+    " To auto-close the method-preview window
+    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+    " Diable auto-comment
+    " https://vim.fandom.com/wiki/Disable_automatic_comment_insertion
+    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " === Keyboard bindings ===
     let mapleader = " "
     let maplocalleader = ","  " https://github.com/jalvesaq/Nvim-R/issues/101#issuecomment-242395913 
     :nmap <Space> :
     
-
     " === vim-easy-align ===
     " Start interactive EasyAlign in visual mode (e.g. vipga): get-aligned
     xmap ga <Plug>(EasyAlign)
     " Start interactive EasyAlign for a motion/text object (e.g. gaip)
     nmap ga <Plug>(EasyAlign)
     
-
-    " === coc.vim ===
-    " Settings
-    set updatetime=300        " Having longer update times lead to poor UX
-    set shortmess+=c          " Don't pass messages to |ins-completion-menu|
-    set signcolumn=yes        " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-    set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
-
-    " To make snippet completion work just like VSCode
-    " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
-    " <<< NOTE: Install coc-snippets with `:CocInstall coc-snippets` for this to work
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? coc#_select_confirm() :
-          \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    " <<< NOTE: Use <C-n> & <C-p> to move to next suggestion for tab-complete
-    let g:coc_snippet_next = '<tab>'
-
-    " Close preview window when completion is done
-    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-    " https://github.com/rstacruz/vim-coc-settings/blob/master/after/plugin/coc.vim
-    " gd - go to definition of word under cursor
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
-    " gi - go to implementation
-    nmap <silent> gi <Plug>(coc-implementation)
-    " gr - find references
-    nmap <silent> gr <Plug>(coc-references)
-    " gh - get hint on whatever's under the cursor
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-    nnoremap <silent> gh :call <SID>show_documentation()<CR>
-    function! s:show_documentation()
-      if &filetype == 'vim'
-        execute 'h '.expand('<cword>')
-      else
-        call CocAction('doHover')
-      endif
-    endfunction
-
-    " Rename the current word in the cursor
-    nmap <leader>cr  <Plug>(coc-rename)
-    nmap <leader>cf  <Plug>(coc-format-selected)
-    vmap <leader>cf  <Plug>(coc-format-selected)
-
 
     " === Some of my fav spacemacs bindings ===
     " Close buffer in focus
@@ -264,237 +192,247 @@ call plug#end()
     nnoremap <leader>wk <C-w>k
     nnoremap <leader>wl <C-w>l
 
-
     " === tmux ===
     " Write all buffers before navigating from Vim to tmux pane
     let g:tmux_navigator_save_on_switch = 2
-
-
-    " " === Nerd Tree ===
-    " " Toggle NERDTree ON or OFF
-    " " ft - file-tree
-    " nnoremap <leader>ft :NERDTreeToggle<CR>
-    " " Close vim if only window left is NERDTree
-    " autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-
-
-    " === Goyo ===
-    " Toggle Goyo ON or OFF
-    " df - distraction-free
-    nnoremap <leader>df :Goyo<CR> 
-
-
-    " " === Vim terminal emulator ===
-    " " <<< NOTE: Use `tmux` with `tmuxinator` for best terminal + vim experience
-    " " Open a terminal
-    " nnoremap <leader>' :let $VIM_DIR=expand('%:p:h')<CR> :8sp term://zsh<CR>cd $VIM_DIR<CR>
-    " " Move to normal mode in terminal
-    " tnoremap <ESC> <C-\><C-n>
-
 
     " === C++ ===
     " Compile current file: compile
     autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
     
-
-    " " === Go ===
+    " === Go ===
     " See - https://tpaschalis.github.io/vim-go-setup/
     let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
     let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
 
-
     " === Misc ===
-    " Remove highlighting after search: highlighting-off
-    nnoremap <leader>ho :noh<CR>
     " Open this file: vim-options 
     nnoremap <leader>vo :e ~/.config/nvim/init.vim<CR>
     " Reload config file 
     nnoremap <C-s> :w<CR>:source ~/.config/nvim/init.vim<CR>
 
-
 " === Plugin Settings ===
-    " === vim-airline ===
-    let g:airline#extensions#tabline#enabled = 1
-    " Use fancy fonts
-    let g:airline_powerline_fonts = 1
-    " Move statusline to the top - Good for Tmux as it has it's own line
-    let g:airline_statusline_ontop=1
-    let g:airline#extensions#whitespace#enabled = 0
-    " Airline + Ale
-    let g:airline#extensions#ale#enabled = 1 
-    " Remove file encoding
-    let g:airline_section_y='' 
-    " Remove line column number and simplify last section
-    let g:airline_section_z = airline#section#create(['%3l:%3v'])
-    " Remove separators for empty sections
-    let g:airline_skip_empty_sections = 1
+    " === lightline ===
+    if !has('gui_running')
+        set t_Co=256
+    endif
+    set laststatus=2
+    set noshowmode
+    set showtabline=2
+    let g:lightline = {
+                \ 'colorscheme': 'onedark',
+                \ 'active': {
+                    \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'] ],
+                    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+                \ },
+                \ 'mode_map': {
+                    \ 'n' : 'N',
+                    \ 'i' : 'I',
+                    \ 'R' : 'R',
+                    \ 'v' : 'V',
+                    \ 'V' : 'VL',
+                    \ "\<C-v>": 'VB',
+                    \ 'c' : 'C',
+                    \ 's' : 'S',
+                    \ 'S' : 'SL',
+                    \ "\<C-s>": 'SB',
+                    \ 't': 'T',
+                \ },
+                \ 'tabline': {
+                    \ 'left': [['buffers']],
+                    \ 'right': [['close']],
+                \ },
+                \ 'component_function': {
+                    \ 'gitbranch': 'fugitive#head',
+                    \ 'gutentags': 'gutentags#statusline',
+                \},
+                \ 'component_expand':{
+                    \ 'buffers': 'lightline#bufferline#buffers',
+                \},
+                \ 'component_type': {
+                    \ 'buffers': 'tabsel',
+                \},
+                \}
+    " If you're adding the buffers to the bottom status bar, the `modified` 
+    " indicator will not be updated immediately. To work around this ->
+    autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
-    " Remove vim's default ugly statusline that remains at the bottom
-    " https://unix.stackexchange.com/questions/140898/vim-hide-status-line-in-the-bottom
-    let s:hidden_all = 0
-    function! TogglehiddenAll()
-        if s:hidden_all == 0
-            let s:hidden_all = 1
-            set noshowmode
-            set noruler
-            set laststatus=0
-            set noshowcmd
-        else
-            let s:hidden_all = 0
-            set showmode
-            set ruler
-            set laststatus=2
-            set showcmd
-        endif
-    endfunction
-    " sh - statusline-hide
-    nnoremap <leader>sh :call TogglehiddenAll()<CR>
-    " Refer https://stackoverflow.com/a/6821698
-    autocmd VimEnter * call TogglehiddenAll()
+    augroup MyGutentagsStatusLineRefresher
+        autocmd!
+        autocmd User GutentagsUpdating call lightline#update()
+        autocmd User GutentagsUpdated call lightline#update()
+    augroup END
 
-    " === vim-airline-themes ===
-    let g:airline_theme = 'minimalist' 
+    let g:lightline#bufferline#unnamed      = '[No Name]'
+    " Add the buffer number to the buffer name
+    " Shows ordinal number
+    let g:lightline#bufferline#show_number = 2
+    " let g:lightline#bufferline#enable_devicons = 1
+    " let g:lightline#bufferline#icon_position = 'right'
+    " let g:lightline#bufferline#enable_nerdfont = 1
+    " let g:lightline#bufferline#unicode_symbols = 1
 
-
-    " === nerd-commenter ===
-    " Add spaces after comment delimiters by default
-    let g:NERDSpaceDelims = 1
-    " Use compact syntax for prettified multi-line comments
-    let g:NERDCompactSexyComs = 1
-    " Align line-wise comment delimiters flush left instead of following code indentation
-    let g:NERDDefaultAlign = 'left'
-    " Set a language to use its alternate delimiters by default
-    let g:NERDAltDelims_java = 1
-    " Add your own custom formats or override the defaults
-    let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-    " Allow commenting and inverting empty lines (useful when commenting a region)
-    let g:NERDCommentEmptyLines = 1
-    " Enable trimming of trailing whitespace when uncommenting
-    let g:NERDTrimTrailingWhitespace = 1
-    " Enable NERDCommenterToggle to check all selected lines is commented or not 
-    let g:NERDToggleCheckAllLines = 1
-
-
-    " === nerd-tree ===
-    " Don't show line numbers in file tree - Doesn't work sometimes though
-    let NERDTreeShowLineNumbers=0
-
-
-    " === goyo ===
-    let g:goyo_width='96%'
-    let g:goyo_height='96%'
-    function! s:goyo_enter()
-        set scrolloff=999
-    endfunction
-
-    function! s:goyo_leave()
-        set noshowmode
-        set noruler
-        set laststatus=0
-        set noshowcmd
-        set scrolloff=5
-    endfunction
-
-    autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
+    " Plug mappings to switch to buffers using their ordinal number in the bufferline
+    nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+    nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+    nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+    nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+    nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+    nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+    nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+    nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+    nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+    nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 
     " === auto-pairs ===
-    " This uses <leader> in insert mode making vim a stuttering mess 
+    " Don't use <leader> in insert mode and make vim a stuttering mess 
     let g:AutoPairsMapSpace = "false"
-
-
-    "" === vim-easytags ===
-    "let g:easytags_async = 1
-    "let g:easytags_file = '~/.vim/tags'
-    "" Project specific tag files
-    "set tags=./tags;
-    "let g:easytags_dynamic_files=0
-
 
     " === ale ===
     " C++
     let g:ale_cpp_gcc_executable='gcc-9'
     let g:ale_cpp_gcc_options='-std=c++17 -Wextra -Wall'
-
     let g:ale_cpp_clang_executable='clang++'
     let g:ale_cpp_clang_options='-std=c++17 -Wextra -Wall'
     
     let g:ale_linters = {
-                \'cpp': ['gcc', 'clang-tidy'],
+                \ 'python': ['flake8', 'pylint'],
+                \ 'go': ['gometalinter', 'gofmt'],
+                \ 'c': ['cc'],
+                \ 'cpp': ['gcc', 'clang-tidy'],
+                \ 'javascript': ['eslint'],
                 \}
+    let g:ale_fixers = {
+                \ 'python': ['yapf'],
+                \ 'go': ['gofmt'],
+                \ 'javascript': ['prettier'],
+                \}
+    nmap <F10> :ALEFix<CR>
+    let g:ale_fix_on_save = 1
 
+    " === treesitter ===
+    " Explicitly activate modules
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+"   highlight = {
+"     enable = true,              -- false will disable the whole extension
+"     disable = { },  -- list of language that will be disabled
+"   },
+" }
+" EOF
 
-    " === coc-snippets ===
-    " Install using `:CocInstall coc-snippets`
-    " https://github.com/neoclide/coc-snippets/issues/15#issuecomment-475891282
-    " <<< NOTE: Use `:CocCommand snippets.ediSnippets` to open the snippet file for the current filetype
-    " <<<       All snippets for the current filetype live there
+    " === Tags === 
+    " From https://stackoverflow.com/questions/11975316/vim-ctags-tag-not-found
+    " set tags=./tags,tags;$HOME
 
+    " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
+    " Configure what a "new project" means for gutentags
+    let g:gutentags_add_default_project_roots = 0
+    let g:gutentags_project_root = ['package.json', '.git']
+    " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
+    let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+    " Save time instead of manually calling gutentags
+    let g:gutentags_generate_on_new = 1
+    let g:gutentags_generate_on_missing = 1
+    let g:gutentags_generate_on_write = 1
+    let g:gutentags_generate_on_empty_buffer = 0
+    " Let gutentags generate more info for the tags
+    let g:gutentags_ctags_extra_args = [
+      \ '--tag-relative=yes',
+      \ '--fields=+ailmnS',
+      \ ]
+    " Make gutentags faster by avoiding certain files
+let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ 'dist',
+      \ 'node_modules',
+      \ 'cache',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ] 
 
-    " " === vim-tex ===
-    " " Since neovim doesn't support the `--servername` option yet
-    " " Install neovim-remote using `pip3 install neovim-remote`
-    " " https://github.com/lervag/vimtex/wiki/introduction#neovim
-    " let g:vimtex_compiler_progname = 'nvr'
-    " let g:vimtex_view_general_viewer
-    "         \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
-    " let g:vimtex_view_general_options = '-r @line @pdf @tex'
-    "
-    " " This adds a callback hook that updates Skim after compilation
-    " let g:vimtex_compiler_callback_hooks = ['UpdateSkim']
-    "
-    " function! UpdateSkim(status)
-    "     if !a:status | return | endif
-    "
-    "     let l:out = b:vimtex.out()
-    "     let l:tex = expand('%:p')
-    "     let l:cmd = [g:vimtex_view_general_viewer, '-r']
-    "
-    "     if !empty(system('pgrep Skim'))
-    "         call extend(l:cmd, ['-g'])
-    "     endif
-    "
-    "     if has('nvim')
-    "         call jobstart(l:cmd + [line('.'), l:out, l:tex])
-    "     elseif has('job')
-    "         call job_start(l:cmd + [line('.'), l:out, l:tex])
-    "     else
-    "         call system(join(l:cmd + [line('.'), shellescape(l:out), shellescape(l:tex)], ' '))
-    "     endif
-    " endfunction
-    "
-    " " Ignore certain warnings
-    " let g:Tex_IgnoredWarnings =
-    "     \'Underfull'."\n".
-    "     \'Overfull'."\n".
-    "     \'specifier changed to'."\n".
-    "     \'You have requested'."\n".
-    "     \'Missing number, treated as zero.'."\n".
-    "     \'There were undefined references'."\n".
-    "     \'Citation %.%# undefined'."\n".
-    "     \'Double space found.'."\n".
-    "     \'Possible unwanted space'."\n".
-    "     \'Wrong length of dash may have been used. (8)'."\n"
-    " let g:Tex_IgnoreLevel = 8
-    "
-    " let g:vimtex_quickfix_latexlog = {
-    "   \ 'overfull' : 0,
-    "   \ 'underfull' : 0,
-    "   \ 'packages' : {
-    "   \   'default' : 0,
-    "   \ },
-    "   \}
-    "
-    " " XeLateX
-    " " https://tex.stackexchange.com/a/510684
-    " let g:vimtex_compiler_latexmk = {
-    "             \ 'executable' : 'latexmk',
-    "             \ 'options' : [
-    "             \   '-xelatex',
-    "             \   '-file-line-error',
-    "             \   '-synctex=1',
-    "             \   '-interaction=nonstopmode',
-    "             \ ],
-    "             \}
-    "
+    " === coc.vim ===
+    " Settings
+    set updatetime=300 " Having longer update times lead to poor UX
+    set shortmess+=c   " Don't pass messages to |ins-completion-menu|
+    set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
+    set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
+
+    " To make snippet completion work just like VSCode
+    " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
+    " <<< NOTE: Use <C-n> & <C-p> to move to next suggestion for tab-complete
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? coc#_select_confirm() :
+          \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+    let g:coc_snippet_next = '<tab>'
+
+    " Close preview window when completion is done
+    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+
+    " Show documentation in a floating window
+    nnoremap <silent> K :call <SID>show_documentation()<CR>
+    function! s:show_documentation()
+      if &filetype == 'vim'
+        execute 'h '.expand('<cword>')
+      else
+        call CocAction('doHover')
+      endif
+    endfunction
+
+    " gd - go to definition of word under cursor
+    nmap <silent> gd <Plug>(coc-definition)
+    " gy - go to type definition
+    nmap <silent> gy <Plug>(coc-type-definition)
+    " gi - go to implementation
+    nmap <silent> gi <Plug>(coc-implementation)
+    " gr - find references
+    nmap <silent> gr <Plug>(coc-references)
+    " gh - get hint on whatever's under the cursor
+    nnoremap <silent> gh :call <SID>show_documentation()<CR>
+    " cr - Rename the current word in the cursor (Renames the exports across all files)
+    nmap <leader>cn  <Plug>(coc-rename)
+    " cf - format selected string
+    nmap <leader>cf  <Plug>(coc-format-selected)
+    " cf - format selected string in visual mode
+    vmap <leader>cf  <Plug>(coc-format-selected)
+
+    " === netrw ===
+    " let g:netrw_banner = 0    " Hide annoying 'help' banner
+    " let g:netrw_liststyle = 3 " Use tree view
+    " let g:netrw_winsize = 25  " Smaller default window size
+    " let g:netrw_browse_split = 4
+    " let g:netrw_altv = 1
+    " augroup ProjectDrawer
+    "     autocmd!
+    "     autocmd VimEnter * :Vexplore
+    " augroup END
+

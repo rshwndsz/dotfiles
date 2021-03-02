@@ -1,5 +1,8 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+
+# For proper color_preset
+export TERM=xterm-256color
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/Russel/.oh-my-zsh"
@@ -19,8 +22,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
+# --- User configuration --- 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -59,28 +61,6 @@ export RBENV_ROOT=/usr/local/var/rbenv
 # Load rbenv automatically
 eval "$(rbenv init -)"
 
-# Aliases for compilers
-# See: https://apple.stackexchange.com/questions/99077/how-to-set-gcc-4-8-as-default-gcc-compiler/99157#99157
-alias gcc="gcc-9"
-alias cc="gcc-9"
-alias g++="g++-9"
-
-# Aliases for tmux
-alias devtm="~/dotfiles/bin/dev-tmux.sh"
-
-# Aliases for cp
-alias cpenv="cd ~/cp && tmuxinator local" 
-alias cptm="cpenv"
-alias cptmux="cpenv"
-alias cpc="g++ -std=c++17 -Wall -Wextra -O2 main.cpp -o main.exe"
-alias cpc11="g++ -std=c++11 -Wall -Wextra -O2 main.cpp -o main.exe"
-alias cpc14="g++ -std=c++14 -Wall -Wextra -O2 main.cpp -o main.exe"
-alias cpcr="g++ -std=c++17 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
-alias cpcr11="g++ -std=c++11 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
-alias cpcr14="g++ -std=c++14 -Wall -Wextra -O2 main.cpp -o main.exe && ./main.exe"
-alias cpr="./main.exe"
-alias endcp="tmux kill-ses -t compro"
-
 # Set $EDITOR
 export EDITOR=nvim
 
@@ -88,6 +68,13 @@ export EDITOR=nvim
 autoload -U promptinit; promptinit
 prompt pure
 
+# --- Aliases ---
+# C/C++ compilers
+alias gcc="gcc-10"
+alias cc="gcc-10"
+alias g++="g++-10"
+# Tmux dev env
+alias dev="~/dotfiles/bin/dev-tmux.sh"
 # Backup obsidian on GitHub
 alias bakobsidian="bash ~/dotfiles/bin/backup-obsidian.sh"
 
