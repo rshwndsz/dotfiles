@@ -4,7 +4,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'dense-analysis/ale'                          " Asynchronous linting and syntax checking
     Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
                                                        " Also install coc-snippets, coc-jedi using :CocInstall <package>
-    Plug 'ctrlpvim/ctrlp.vim'                          " Fuzzy file, buffer, mru, tag, etc. finder
+    Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }  " Fuzzy text completion 
+    Plug 'junegunn/fzf.vim'
     Plug 'ludovicchabant/vim-gutentags'                " A Vim plugin that manages your tag files
 
 " === Language-specific ===
@@ -28,7 +29,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
     Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
     Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
-    " Plug 'ryanoasis/vim-devicons'                      " Adds filetype icons to vim plugins
 call plug#end()
 
 " === General settings ===
@@ -298,12 +298,13 @@ call plug#end()
     let g:ale_linters = {
                 \ 'python': ['flake8', 'pylint'],
                 \ 'go': ['gometalinter', 'gofmt'],
-                \ 'c': ['cc'],
-                \ 'cpp': ['gcc', 'clang-tidy'],
+                \ 'c': ['gcc', 'clangtidy'],
+                \ 'cpp': ['gcc', 'clangtidy'],
                 \ 'javascript': ['eslint'],
                 \}
     let g:ale_fixers = {
                 \ 'python': ['yapf'],
+                \ 'cpp': ['clang-format', 'clangtidy'],
                 \ 'go': ['gofmt'],
                 \ 'javascript': ['prettier'],
                 \}
@@ -332,6 +333,8 @@ call plug#end()
     let g:gutentags_project_root = ['package.json', '.git']
     " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
     let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+    " Exclude certain files that are temporary
+    let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
     " Save time instead of manually calling gutentags
     let g:gutentags_generate_on_new = 1
     let g:gutentags_generate_on_missing = 1
@@ -424,6 +427,46 @@ let g:gutentags_ctags_exclude = [
     nmap <leader>cf  <Plug>(coc-format-selected)
     " cf - format selected string in visual mode
     vmap <leader>cf  <Plug>(coc-format-selected)
+
+    " === fzf.vim ===
+    " Layout
+    let g:fzf_layout = { 'down': '~30%' }
+    " Customize fzf colors to match your color scheme
+    " - fzf#wrap translates this to a set of `--color` options
+    let g:fzf_colors =
+                \ { 'fg':      ['fg', 'Normal'],
+                \ 'bg':      ['bg', 'Normal'],
+                \ 'hl':      ['fg', 'Comment'],
+                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+                \ 'hl+':     ['fg', 'Statement'],
+                \ 'info':    ['fg', 'PreProc'],
+                \ 'border':  ['fg', 'Ignore'],
+                \ 'prompt':  ['fg', 'Conditional'],
+                \ 'pointer': ['fg', 'Exception'],
+                \ 'marker':  ['fg', 'Keyword'],
+                \ 'spinner': ['fg', 'Label'],
+                \ 'header':  ['fg', 'Comment'] }
+
+    " Syntax highlighting 
+    " Internally uses `bat`: Install using `brew install bat`
+    command! -bang -nargs=? -complete=dir Files
+                \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+    " Mappings
+    " Inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
+    " By default
+    " <C-t> tab split
+    " <C-x> split
+    " <C-v> vsplit
+    " Since I'm used to ctrl-p
+    nnoremap <C-p> :GFiles<CR> 
+    nnoremap <leader>fi :Files<CR>
+    nnoremap <C-b> :Buffers<CR>
+
+    " === vim-commentary ===
+    " https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
+    autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
 
     " === netrw ===
     " let g:netrw_banner = 0    " Hide annoying 'help' banner
