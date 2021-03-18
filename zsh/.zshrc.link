@@ -78,3 +78,8 @@ alias dev="~/dotfiles/bin/dev-tmux.sh"
 # Backup obsidian on GitHub
 alias bakobsidian="bash ~/dotfiles/bin/backup-obsidian.sh"
 
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+

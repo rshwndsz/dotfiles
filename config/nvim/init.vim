@@ -1,481 +1,536 @@
 " My neovim config file
 call plug#begin('~/.vim/plugged')
 " === Brains ===
-    Plug 'dense-analysis/ale'                          " Asynchronous linting and syntax checking
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
-                                                       " Also install coc-snippets, coc-jedi using :CocInstall <package>
-    Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }  " Fuzzy text completion 
-    Plug 'junegunn/fzf.vim'
-    Plug 'ludovicchabant/vim-gutentags'                " A Vim plugin that manages your tag files
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
+Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }  " Fuzzy text completion 
+Plug 'junegunn/fzf.vim'
+" Plug 'ludovicchabant/vim-gutentags'              " A Vim plugin that manages your tag files
+                                                   " Uncomment after vim-treesitter becomes more stable
 
 " === Language-specific ===
-    Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
-    Plug 'Vimjas/vim-python-pep8-indent'               " A nicer python indentation style for Vim
-    Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
+Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
+Plug 'Vimjas/vim-python-pep8-indent'               " A nicer python indentation style for Vim
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
+Plug 'HerringtonDarkholme/yats.vim'                " TS Syntax
 
 " === Shortcuts ===
-    Plug 'tpope/vim-fugitive'                          " A Git wrapper awesome, it should be illegal
-    Plug 'tpope/vim-surround'                          " Quoting / parenthesizing made simple
-    Plug 'tpope/vim-commentary'                        " Comment out stuff: gcc to comment a line; gc<motion> for magic
-    Plug 'jiangmiao/auto-pairs'                        " Vim plugin to insert or delete brackets, parens, quotes in air
-    Plug 'junegunn/vim-easy-align'                     " Simple, easy-to-use vim-alignment plugin
+Plug 'tpope/vim-fugitive'                          " A Git wrapper 'so awesome, it should be illegal'
+Plug 'tpope/vim-surround'                          " Quoting / parenthesizing made simple
+Plug 'tpope/vim-commentary'                        " Comment out stuff: gcc to comment a line; gc<motion> for magic
+Plug 'junegunn/vim-easy-align'                     " Simple, easy-to-ubse vim-alignment plugin
+Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
 
-" === Visuals ===
-    Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
-    Plug 'itchyny/lightline.vim'                       " Lightweight statusline
-    Plug 'mengelbrecht/lightline-bufferline'           " ...display the list of buffers in the lightline vim plugin
-    Plug 'ap/vim-css-color'                            " Preview colours in source code while editing
-    Plug 'sickill/vim-monokai'                         " Refined Monokai color scheme for Vim, inspired by Sublime text
-    Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
-    Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
-    Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
+" === Editor visuals ===
+Plug 'ap/vim-css-color'                            " Preview colours in source code while editing
+Plug 'itchyny/lightline.vim'                       " Lightweight statusline
+Plug 'mengelbrecht/lightline-bufferline'           " ...display the list of buffers in the lightline vim plugin
+Plug 'preservim/nerdtree'                          " A tree explorer plugin for vim
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ryanoasis/vim-devicons'
+Plug 'vwxyutarooo/nerdtree-devicons-syntax'
+
+" === Themes ===
+Plug 'sickill/vim-monokai'                         " Refined Monokai color scheme for Vim, inspired by Sublime text
+Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
+Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
+Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
 call plug#end()
 
 " === General settings ===
-    let g:python3_host_prog = '/usr/local/bin/python3' " Python for neovim
-    set encoding=UTF-8
-    set splitbelow                                     " Open horizontal splits at bottom
-    set splitright                                     " Open vertical splits at right
+let g:python3_host_prog = '/usr/local/bin/python3' " python for neovim
+set encoding=utf-8
+set splitbelow                                     " open horizontal splits at bottom
+set splitright                                     " open vertical splits at right
 
-" === Visuals ===
-    if (has("termguicolors"))
-        set termguicolors
-    endif
-    syntax enable  " Enable syntax highlighting
-    set cursorline " Highlighting that moves with the cursor
+" === visuals ===
+if (has("termguicolors"))
+  set termguicolors
+endif
+syntax enable  " enable syntax highlighting
+set cursorline " highlighting that moves with the cursor
 
-    " === Colorscheme ===
-    " ONEDARK
-    colorscheme onedark
+" === colorscheme ===
+" onedark
+" colorscheme onedark
 
-    " GRUVBOX
-    " Configuration from https://github.com/morhetz/gruvbox/wiki/Configuration
-    " colorscheme gruvbox
-    " let g:gruvbox_contrast_dark="medium"
+" gruvbox
+" configuration from https://github.com/morhetz/gruvbox/wiki/configuration
+colorscheme gruvbox
+let g:gruvbox_contrast_dark="medium"
 
-    " MONOKAI
-    " colorscheme monokai
+" monokai
+" colorscheme monokai
 
-" === Spacing & Indentation ===
-    " Adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
-    " Enable filetype plugins
-    filetype plugin on
-    filetype indent on
-    " Configure backspace so it acts as it should act
-    set backspace=indent,eol,start confirm
-    set whichwrap+=<,>,h,l
+" === spacing & indentation ===
+" adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
+" enable filetype plugins
+filetype plugin on
+filetype indent on
+" configure backspace so it acts as it should act
+set backspace=indent,eol,start confirm
+set whichwrap+=<,>,h,l
 
-    " Linebreak on 500 characters
-    set lbr
-    set tw=250
-    " Auto indent
-    set ai
-    " Smart indent
-    set si
-    " Wrap lines
-    set wrap
-    " Height of the command bar
-    set cmdheight=1
-    " Use spaces instead of tab
-    set expandtab
-    " Be smart when using tabs :)
-    set smarttab
-    " 1 tab <-> 4 spaces
-    set shiftwidth=4
-    set tabstop=4
-    " === Language-specific ===
-    " TODO: Find a better way
-    " 1 tab <-> 2 spaces for JavaScript
-    autocmd FileType javascript setlocal shiftwidth=2 tabstop=3
+" linebreak on 500 characters
+set lbr
+set tw=250
+" auto indent
+set ai
+" smart indent
+set si
+" wrap lines
+set wrap
+" height of the command bar
+set cmdheight=1
+" use spaces instead of tab
+set expandtab
+" be smart when using tabs :)
+set smarttab
+" 1 tab <-> 2 spaces
+set shiftwidth=2
+set tabstop=2
 
-" === Line Numbering ===
-    set number
-    " Toggle relative numbering, and set to absolute on loss of focus or insert mode
-    autocmd InsertEnter * :set nornu
-    autocmd InsertLeave * :set rnu
-    " Disable relative numbering while debugging - when source window loses focus
-    autocmd BufLeave * :set nornu
-    autocmd BufEnter * cal SetRNU()
-    function! SetRNU()
-      if(mode() != 'i')
-          set rnu
-      endif 
-    endfunction 
+" === line numbering ===
+set number
+" toggle relative numbering, and set to absolute on loss of focus or insert mode
+autocmd insertenter * :set nornu
+autocmd insertleave * :set rnu
+" disable relative numbering while debugging - when source window loses focus
+autocmd bufleave * :set nornu
+autocmd bufenter * cal SetRNU()
+function! SetRNU()
+  if(mode() != 'i')
+    set rnu
+  endif 
+endfunction 
 
-" === Folds ===
-    set foldmethod=indent   " Fold based on indent
-    set foldnestmax=3       " Deepest fold is 3 levels
-    set nofoldenable        " Don't fold by default
+" === folds ===
+set foldmethod=indent   " fold based on indent
+set foldnestmax=3       " deepest fold is 3 levels
+set nofoldenable        " don't fold by default
 
-" === Search & Replace ===
-    " Ignorecase when searching
-    set ignorecase
-    " Incremental search - Vim starts searching when we start typing
-    set incsearch
-    " When searching try to be smart about cases
-    set smartcase
-    " Highlight search results
-    set hlsearch
-    " Remove highlighting after search: highlighting-off
-    nnoremap <leader>ho :nohlsearch<CR>
-    " Live feedback while replacing text
-    " https://dev.to/waylonwalker/live-substitution-in-neovim-5e34
-    set inccommand=nosplit
+" === search & replace ===
+" ignorecase when searching
+set ignorecase
+" incremental search - vim starts searching when we start typing
+set incsearch
+" when searching try to be smart about cases
+set smartcase
+" highlight search results
+set hlsearch
+" live feedback while replacing text
+" https://dev.to/waylonwalker/live-substitution-in-neovim-5e34
+set inccommand=nosplit
 
-    " Stuff to ignore when tab completing
-    set wildoptions=pum
-    set wildignore=*.o,*.obj,*~                                                     
-    set wildignore+=*.exe
-    set wildignore+=*.git*
-    set wildignore+=*.meteor*
-    set wildignore+=*vim/backups*
-    set wildignore+=*sass-cache*
-    set wildignore+=*mypy_cache*
-    set wildignore+=*__pycache__*
-    set wildignore+=*cache*
-    set wildignore+=*node_modules*
-    set wildignore+=**/node_modules/**
-    set wildignore+=*DS_Store*
-    set wildignore+=*.gem
+" stuff to ignore when tab completing
+set wildoptions=pum
+set wildignore=*.o,*.obj,*~                                                     
+set wildignore+=*.exe
+set wildignore+=*.git*
+set wildignore+=*.meteor*
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*mypy_cache*
+set wildignore+=*__pycache__*
+set wildignore+=*cache*
+set wildignore+=*node_modules*
+set wildignore+=**/node_modules/**
+set wildignore+=*ds_store*
+set wildignore+=*.gem
 
-" === File Management ===
-    set noswapfile
-    set nobackup
-    set nowritebackup " Some servers (coc.vim) have issues with backup files
-    set nowb
-    set autoread
-    " Triger `autoread` when files changes on disk
-    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
-    " Notification after file change
-    autocmd FileChangedShellPost *
-    \ echohl WarningMsg | echo "File changed on disk. Buffer reloaded." | echohl None
+" === file management ===
+set noswapfile
+set nobackup
+set nowritebackup " some servers (coc.vim) have issues with backup files
+set nowb
+set autoread
+" triger `autoread` when files changes on disk
+autocmd focusgained,bufenter,cursorhold,cursorholdi * if mode() != 'c' | checktime | endif
+" notification after file change
+autocmd filechangedshellpost *
+      \ echohl warningmsg | echo "file changed on disk. buffer reloaded." | echohl none
 
-" === Scrolling ===
-    set scrolloff=8 " Start scrolling when we're 8 lines away from margins
+" === scrolling ===
+set scrolloff=8 " start scrolling when we're 8 lines away from margins
 
-" === Performance ===
-    set lazyredraw " Fix slow scrolling that occurs when using mouse and relative numbers
+" === performance ===
+set lazyredraw " fix slow scrolling that occurs when using mouse and relative numbers
 
-" === Fix annoyances ===
-    " To auto-close the method-preview window
-    autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-    " Diable auto-comment
-    " https://vim.fandom.com/wiki/Disable_automatic_comment_insertion
-    autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" === fix annoyances ===
+" to auto-close the method-preview window
+autocmd insertleave,completedone * if pumvisible() == 0 | pclose | endif
+" diable auto-comment
+" https://vim.fandom.com/wiki/disable_automatic_comment_insertion
+autocmd filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" === Keyboard bindings ===
-    let mapleader = " "
-    let maplocalleader = ","  " https://github.com/jalvesaq/Nvim-R/issues/101#issuecomment-242395913 
-    :nmap <Space> :
-    
-    " === vim-easy-align ===
-    " Start interactive EasyAlign in visual mode (e.g. vipga): get-aligned
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
-    
+" === keyboard bindings ===
+let mapleader = " "
+let maplocalleader = ","  " https://github.com/jalvesaq/nvim-r/issues/101#issuecomment-242395913 
+:nmap <space> :
 
-    " === Some of my fav spacemacs bindings ===
-    " Close buffer in focus
-    " bd - buffer-delete
-    nnoremap <leader>bd <C-w>q
-    nnoremap <leader>bn :w<CR>:bn<CR> 
-    " Splits
-    " vs - vertical-split
-    nnoremap <leader>vs :vsplit<CR>
-    " hs - horizontal-split
-    nnoremap <leader>hs :split<CR>
+" === vim-easy-align ===
+" start interactive easyalign in visual mode (e.g. vipga): easy-aligned
+xmap ga <plug>(easyalign)
+" start interactive easyalign for a motion/text object (e.g. gaip)
+nmap ga <plug>(easyalign)
 
-    " Move between buffers
-    nnoremap <leader>wh <C-w>h 
-    nnoremap <leader>wj <C-w>j
-    nnoremap <leader>wk <C-w>k
-    nnoremap <leader>wl <C-w>l
 
-    " === tmux ===
-    " Write all buffers before navigating from Vim to tmux pane
-    let g:tmux_navigator_save_on_switch = 2
+" === some of my fav spacemacs bindings ===
+" close buffer in focus
+" bd - buffer-delete
+nnoremap <leader>bd <c-w>q
+nnoremap <leader>bn :w<cr>:bn<cr> 
+" splits
+" vs - vertical-split
+nnoremap <leader>vs :vsplit<cr>
+" hs - horizontal-split
+nnoremap <leader>hs :split<cr>
 
-    " === C++ ===
-    " Compile current file: compile
-    autocmd FileType cpp,c,objc nmap <buffer> <leader>cm :w <CR> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <CR>
-    
-    " === Go ===
-    " See - https://tpaschalis.github.io/vim-go-setup/
-    let g:go_fmt_command = "goimports"    " Run goimports along gofmt on each save
-    let g:go_auto_type_info = 1           " Automatically get signature/type info for object under cursor
+" move between buffers
+nnoremap <leader>wh <c-w>h 
+nnoremap <leader>wj <c-w>j
+nnoremap <leader>wk <c-w>k
+nnoremap <leader>wl <c-w>l
 
-    " === Misc ===
-    " Open this file: vim-options 
-    nnoremap <leader>vo :e ~/.config/nvim/init.vim<CR>
-    " Reload config file 
-    nnoremap <C-s> :w<CR>:source ~/.config/nvim/init.vim<CR>
+" === tmux ===
+" write all buffers before navigating from vim to tmux pane
+let g:tmux_navigator_save_on_switch = 2
 
-" === Plugin Settings ===
-    " === lightline ===
-    if !has('gui_running')
-        set t_Co=256
-    endif
-    set laststatus=2
-    set noshowmode
-    set showtabline=2
-    let g:lightline = {
-                \ 'colorscheme': 'onedark',
-                \ 'active': {
-                    \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'] ],
-                    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-                \ },
-                \ 'mode_map': {
-                    \ 'n' : 'N',
-                    \ 'i' : 'I',
-                    \ 'R' : 'R',
-                    \ 'v' : 'V',
-                    \ 'V' : 'VL',
-                    \ "\<C-v>": 'VB',
-                    \ 'c' : 'C',
-                    \ 's' : 'S',
-                    \ 'S' : 'SL',
-                    \ "\<C-s>": 'SB',
-                    \ 't': 'T',
-                \ },
-                \ 'tabline': {
-                    \ 'left': [['buffers']],
-                    \ 'right': [['close']],
-                \ },
-                \ 'component_function': {
-                    \ 'gitbranch': 'fugitive#head',
-                    \ 'gutentags': 'gutentags#statusline',
-                \},
-                \ 'component_expand':{
-                    \ 'buffers': 'lightline#bufferline#buffers',
-                \},
-                \ 'component_type': {
-                    \ 'buffers': 'tabsel',
-                \},
-                \}
-    " If you're adding the buffers to the bottom status bar, the `modified` 
-    " indicator will not be updated immediately. To work around this ->
-    autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+" === c++ ===
+" compile current file: compile
+autocmd filetype cpp,c,objc nmap <buffer> <leader>cm :w <cr> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <cr>
 
-    augroup MyGutentagsStatusLineRefresher
-        autocmd!
-        autocmd User GutentagsUpdating call lightline#update()
-        autocmd User GutentagsUpdated call lightline#update()
-    augroup END
+" === go ===
+" see - https://tpaschalis.github.io/vim-go-setup/
+let g:go_fmt_command = "goimports"    " run goimports along gofmt on each save
+let g:go_auto_type_info = 1           " automatically get signature/type info for object under cursor
 
-    let g:lightline#bufferline#unnamed      = '[No Name]'
-    " Add the buffer number to the buffer name
-    " Shows ordinal number
-    let g:lightline#bufferline#show_number = 2
-    " let g:lightline#bufferline#enable_devicons = 1
-    " let g:lightline#bufferline#icon_position = 'right'
-    " let g:lightline#bufferline#enable_nerdfont = 1
-    " let g:lightline#bufferline#unicode_symbols = 1
+" === misc ===
+" open this file: vim-options 
+nnoremap <leader>vo :e ~/.config/nvim/init.vim<cr>
+" reload config file 
+nnoremap <c-s> :w<cr>:source ~/.config/nvim/init.vim<cr>
 
-    " Plug mappings to switch to buffers using their ordinal number in the bufferline
-    nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-    nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-    nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-    nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-    nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-    nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-    nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-    nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-    nmap <Leader>9 <Plug>lightline#bufferline#go(9)
-    nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+" === plugin settings ===
+" === lightline ===
+if !has('gui_running')
+  set t_co=256
+endif
+set laststatus=2
+set noshowmode
+set showtabline=2
+let g:lightline = {
+      \ 'colorscheme': 'gruvbox',
+      \ 'active': {
+        \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'] ],
+        \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+      \ },
+      \ 'mode_map': {
+      \ 'n' : 'N',
+      \ 'i' : 'I',
+      \ 'r' : 'R',
+      \ 'v' : 'V',
+      \ 'V' : 'VL',
+      \ "\<c-v>": 'VB',
+      \ 'c' : 'C',
+      \ 's' : 'S',
+      \ 'S' : 'SL',
+      \ "\<c-s>": 'SB',
+      \ 't': 'T',
+      \ },
+      \ 'tabline': {
+      \ 'left': [['buffers']],
+      \ 'right': [['close']],
+      \ },
+      \ 'component_function': {
+      \ 'gitbranch': 'fugitive#head',
+      \ 'gutentags': 'gutentags#statusline',
+      \},
+      \ 'component_expand':{
+        \ 'buffers': 'lightline#bufferline#buffers',
+      \},
+      \ 'component_type': {
+      \ 'buffers': 'tabsel',
+      \},
+      \}
+" if you're adding the buffers to the bottom status bar, the `modified` 
+" indicator will not be updated immediately. to work around this ->
+autocmd bufwritepost,textchanged,textchangedi * call lightline#update()
 
-    " === auto-pairs ===
-    " Don't use <leader> in insert mode and make vim a stuttering mess 
-    let g:AutoPairsMapSpace = "false"
+augroup mygutentagsstatuslinerefresher
+  autocmd!
+  autocmd user gutentagsupdating call lightline#update()
+  autocmd user gutentagsupdated call lightline#update()
+augroup end
 
-    " === ale ===
-    " C++
-    let g:ale_cpp_gcc_executable='gcc-9'
-    let g:ale_cpp_gcc_options='-std=c++17 -Wextra -Wall'
-    let g:ale_cpp_clang_executable='clang++'
-    let g:ale_cpp_clang_options='-std=c++17 -Wextra -Wall'
-    
-    let g:ale_linters = {
-                \ 'python': ['flake8', 'pylint'],
-                \ 'go': ['gometalinter', 'gofmt'],
-                \ 'c': ['gcc', 'clangtidy'],
-                \ 'cpp': ['gcc', 'clangtidy'],
-                \ 'javascript': ['eslint'],
-                \}
-    let g:ale_fixers = {
-                \ 'python': ['yapf'],
-                \ 'cpp': ['clang-format', 'clangtidy'],
-                \ 'go': ['gofmt'],
-                \ 'javascript': ['prettier'],
-                \}
-    nmap <F10> :ALEFix<CR>
-    let g:ale_fix_on_save = 1
+let g:lightline#bufferline#unnamed = '[no name]'
+" add the buffer number to the buffer name
+" shows ordinal number
+let g:lightline#bufferline#show_number = 2
 
-    " === treesitter ===
-    " Explicitly activate modules
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-"   highlight = {
-"     enable = true,              -- false will disable the whole extension
-"     disable = { },  -- list of language that will be disabled
-"   },
-" }
-" EOF
+" plug mappings to switch to buffers using their ordinal number in the bufferline
+nmap <leader>1 <plug>lightline#bufferline#go(1)
+nmap <leader>2 <plug>lightline#bufferline#go(2)
+nmap <leader>3 <plug>lightline#bufferline#go(3)
+nmap <leader>4 <plug>lightline#bufferline#go(4)
+nmap <leader>5 <plug>lightline#bufferline#go(5)
+nmap <leader>6 <plug>lightline#bufferline#go(6)
+nmap <leader>7 <plug>lightline#bufferline#go(7)
+nmap <leader>8 <plug>lightline#bufferline#go(8)
+nmap <leader>9 <plug>lightline#bufferline#go(9)
+nmap <leader>0 <plug>lightline#bufferline#go(10)
 
-    " === Tags === 
-    " From https://stackoverflow.com/questions/11975316/vim-ctags-tag-not-found
-    " set tags=./tags,tags;$HOME
+" === auto-pairs ===
+" don't use <leader> in insert mode and make vim a stuttering mess 
+let g:autopairsmapspace = "false"
 
-    " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
-    " Configure what a "new project" means for gutentags
-    let g:gutentags_add_default_project_roots = 0
-    let g:gutentags_project_root = ['package.json', '.git']
-    " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
-    let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
-    " Exclude certain files that are temporary
-    let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
-    " Save time instead of manually calling gutentags
-    let g:gutentags_generate_on_new = 1
-    let g:gutentags_generate_on_missing = 1
-    let g:gutentags_generate_on_write = 1
-    let g:gutentags_generate_on_empty_buffer = 0
-    " Let gutentags generate more info for the tags
-    let g:gutentags_ctags_extra_args = [
-      \ '--tag-relative=yes',
-      \ '--fields=+ailmnS',
+" " === Tags === 
+" " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
+" " Configure what a 'new project' means for gutentags
+" let g:gutentags_add_default_project_roots = 0
+" let g:gutentags_project_root = ['package.json', '.git']
+" " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
+" let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+" " Exclude certain files that are temporary
+" let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
+" " Save time instead of manually calling gutentags
+" let g:gutentags_generate_on_new = 1
+" let g:gutentags_generate_on_missing = 1
+" let g:gutentags_generate_on_write = 1
+" let g:gutentags_generate_on_empty_buffer = 0
+" " Let gutentags generate more info for the tags
+" let g:gutentags_ctags_extra_args = [
+"       \ '--tag-relative=yes',
+"       \ '--fields=+ailmnS',
+"       \ ]
+" " Make gutentags faster by avoiding certain files
+" let g:gutentags_ctags_exclude = [
+"       \ '*.git', '*.svg', '*.hg',
+"       \ 'dist',
+"       \ 'node_modules',
+"       \ 'cache',
+"       \ '*-lock.json',
+"       \ '*.lock',
+"       \ '*bundle*.js',
+"       \ '*build*.js',
+"       \ '*.json',
+"       \ '*.min.*',
+"       \ '*.map',
+"       \ '*.bak',
+"       \ '*.zip',
+"       \ '*.pyc',
+"       \ '*.class',
+"       \ '*.csproj',
+"       \ '*.tmp',
+"       \ '*.csproj.user',
+"       \ '*.cache',
+"       \ '*.pdb',
+"       \ 'tags*',
+"       \ 'cscope.*',
+"       \ '*.exe', '*.dll',
+"       \ '*.mp3', '*.ogg', '*.flac',
+"       \ '*.swp', '*.swo',
+"       \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+"       \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+"       \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+"       \ ] 
+
+" === fzf.vim ===
+" Layout
+let g:fzf_layout = { 'down': '~30%' }
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+      \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
+
+" Syntax highlighting 
+" Internally uses `bat`: Install using `brew install bat`
+command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Mappings
+" Inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
+" By default
+" <C-t> tab split
+" <C-x> split
+" <C-v> vsplit
+" Since I'm used to ctrl-p
+nnoremap <C-p> :GFiles<CR> 
+nnoremap <leader>fi :Files<CR>
+nnoremap <C-b> :Buffers<CR>
+
+" === vim-commentary ===
+" https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
+autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
+
+" === NerdTree ===
+nnoremap <leader>kl :NERDTreeToggle<CR>
+
+" https://github.com/preservim/nerdtree/issues/817#issuecomment-373001775
+let g:NERDTreeIgnore = ['^node_modules$', '^__pycache__$', '^.git$']
+
+" Start NERDTree when Vim starts with a directory argument.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+
+" Exit Vim if NERDTree is the only window left.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+    \ quit | endif
+
+" https://github.com/Xuyuanp/nerdtree-git-plugin
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+let g:NERDTreeGitStatusUseNerdFonts = 1 
+let g:NERDTreeGitStatusConcealBrackets = 1 
+
+" === coc.vim ===
+" coc config
+let g:coc_global_extensions = [
+      \ 'coc-snippets',
+      \ 'coc-pairs',
+      \ 'coc-tsserver',
+      \ 'coc-eslint', 
+      \ 'coc-prettier', 
+      \ 'coc-json', 
       \ ]
-    " Make gutentags faster by avoiding certain files
-let g:gutentags_ctags_exclude = [
-      \ '*.git', '*.svg', '*.hg',
-      \ 'dist',
-      \ 'node_modules',
-      \ 'cache',
-      \ '*-lock.json',
-      \ '*.lock',
-      \ '*bundle*.js',
-      \ '*build*.js',
-      \ '*.json',
-      \ '*.min.*',
-      \ '*.map',
-      \ '*.bak',
-      \ '*.zip',
-      \ '*.pyc',
-      \ '*.class',
-      \ '*.csproj',
-      \ '*.tmp',
-      \ '*.csproj.user',
-      \ '*.cache',
-      \ '*.pdb',
-      \ 'tags*',
-      \ 'cscope.*',
-      \ '*.exe', '*.dll',
-      \ '*.mp3', '*.ogg', '*.flac',
-      \ '*.swp', '*.swo',
-      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
-      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
-      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
-      \ ] 
 
-    " === coc.vim ===
-    " Settings
-    set updatetime=300 " Having longer update times lead to poor UX
-    set shortmess+=c   " Don't pass messages to |ins-completion-menu|
-    set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
-    set clipboard=unnamedplus " Map system keyboard to vim's paste buffer
+" Setup Prettier
+" https://github.com/neoclide/coc-prettier#usage
+" Use :Prettier to format buffer
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
-    " To make snippet completion work just like VSCode
-    " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
-    " <<< NOTE: Use <C-n> & <C-p> to move to next suggestion for tab-complete
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? coc#_select_confirm() :
-          \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-    let g:coc_snippet_next = '<tab>'
+" Settings
+set updatetime=300 " Having longer update times lead to poor UX
+set shortmess+=c   " Don't pass messages to |ins-completion-menu|
+set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
 
-    " Close preview window when completion is done
-    autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
+" To make snippet completion work just like VSCode
+" https://github.com/neoclide/coc.nvim/wiki/Using-snippets
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    " Show documentation in a floating window
-    nnoremap <silent> K :call <SID>show_documentation()<CR>
-    function! s:show_documentation()
-      if &filetype == 'vim'
-        execute 'h '.expand('<cword>')
-      else
-        call CocAction('doHover')
-      endif
-    endfunction
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-    " gd - go to definition of word under cursor
-    nmap <silent> gd <Plug>(coc-definition)
-    " gy - go to type definition
-    nmap <silent> gy <Plug>(coc-type-definition)
-    " gi - go to implementation
-    nmap <silent> gi <Plug>(coc-implementation)
-    " gr - find references
-    nmap <silent> gr <Plug>(coc-references)
-    " gh - get hint on whatever's under the cursor
-    nnoremap <silent> gh :call <SID>show_documentation()<CR>
-    " cr - Rename the current word in the cursor (Renames the exports across all files)
-    nmap <leader>cn  <Plug>(coc-rename)
-    " cf - format selected string
-    nmap <leader>cf  <Plug>(coc-format-selected)
-    " cf - format selected string in visual mode
-    vmap <leader>cf  <Plug>(coc-format-selected)
+" Use <C-space> to trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
 
-    " === fzf.vim ===
-    " Layout
-    let g:fzf_layout = { 'down': '~30%' }
-    " Customize fzf colors to match your color scheme
-    " - fzf#wrap translates this to a set of `--color` options
-    let g:fzf_colors =
-                \ { 'fg':      ['fg', 'Normal'],
-                \ 'bg':      ['bg', 'Normal'],
-                \ 'hl':      ['fg', 'Comment'],
-                \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-                \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-                \ 'hl+':     ['fg', 'Statement'],
-                \ 'info':    ['fg', 'PreProc'],
-                \ 'border':  ['fg', 'Ignore'],
-                \ 'prompt':  ['fg', 'Conditional'],
-                \ 'pointer': ['fg', 'Exception'],
-                \ 'marker':  ['fg', 'Keyword'],
-                \ 'spinner': ['fg', 'Label'],
-                \ 'header':  ['fg', 'Comment'] }
+" Use <cr> to confirm completion. 
+" <C-g>u means break undo chain at current position
+" Coc only does snippet and additional edit on confirm
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-    " Syntax highlighting 
-    " Internally uses `bat`: Install using `brew install bat`
-    command! -bang -nargs=? -complete=dir Files
-                \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-    " Mappings
-    " Inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
-    " By default
-    " <C-t> tab split
-    " <C-x> split
-    " <C-v> vsplit
-    " Since I'm used to ctrl-p
-    nnoremap <C-p> :GFiles<CR> 
-    nnoremap <leader>fi :Files<CR>
-    nnoremap <C-b> :Buffers<CR>
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-    " === vim-commentary ===
-    " https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
-    autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-    " === netrw ===
-    " let g:netrw_banner = 0    " Hide annoying 'help' banner
-    " let g:netrw_liststyle = 3 " Use tree view
-    " let g:netrw_winsize = 25  " Smaller default window size
-    " let g:netrw_browse_split = 4
-    " let g:netrw_altv = 1
-    " augroup ProjectDrawer
-    "     autocmd!
-    "     autocmd VimEnter * :Vexplore
-    " augroup END
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Remap for rename current word
+nmap <F2> <Plug>(coc-rename)
+
+" Remap for format selected region
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <C-q> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+" Was <C-d>:: Conflicted with moving down
+" Was <C-r>:: Conflicted with redo
+nmap <silent> <C-q> <Plug>(coc-range-select)
+xmap <silent> <C-q> <Plug>(coc-range-select)
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
