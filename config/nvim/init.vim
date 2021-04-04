@@ -24,6 +24,7 @@ Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between
 Plug 'ap/vim-css-color'                            " Preview colours in source code while editing
 Plug 'itchyny/lightline.vim'                       " Lightweight statusline
 Plug 'mengelbrecht/lightline-bufferline'           " ...display the list of buffers in the lightline vim plugin
+Plug 'josa42/vim-lightline-coc'                    " Coc diagnostics indicator for lightline
 Plug 'preservim/nerdtree'                          " A tree explorer plugin for vim
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
@@ -41,6 +42,7 @@ let g:python3_host_prog = '/usr/local/bin/python3' " python for neovim
 set encoding=utf-8
 set splitbelow                                     " open horizontal splits at bottom
 set splitright                                     " open vertical splits at right
+set clipboard=unnamedplus
 
 " === visuals ===
 if (has("termguicolors"))
@@ -51,12 +53,12 @@ set cursorline " highlighting that moves with the cursor
 
 " === colorscheme ===
 " onedark
-" colorscheme onedark
+colorscheme onedark
 
 " gruvbox
 " configuration from https://github.com/morhetz/gruvbox/wiki/configuration
-colorscheme gruvbox
-let g:gruvbox_contrast_dark="medium"
+" colorscheme gruvbox
+" let g:gruvbox_contrast_dark="medium"
 
 " monokai
 " colorscheme monokai
@@ -219,9 +221,9 @@ set laststatus=2
 set noshowmode
 set showtabline=2
 let g:lightline = {
-      \ 'colorscheme': 'gruvbox',
+      \ 'colorscheme': 'onedark',
       \ 'active': {
-        \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'] ],
+        \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ] ],
         \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
       \ },
       \ 'mode_map': {
@@ -252,6 +254,9 @@ let g:lightline = {
       \ 'buffers': 'tabsel',
       \},
       \}
+" Register components
+call lightline#coc#register()
+
 " if you're adding the buffers to the bottom status bar, the `modified` 
 " indicator will not be updated immediately. to work around this ->
 autocmd bufwritepost,textchanged,textchangedi * call lightline#update()
