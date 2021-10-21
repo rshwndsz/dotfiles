@@ -1,48 +1,48 @@
 " My neovim config file
 call plug#begin('~/.vim/plugged')
-" === Brains ===
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }  " Intellisense engine form vim8 & neovim, full lsp as vscode
-Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }  " Fuzzy text completion 
+" === brains ===
+Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
+Plug 'junegunn/fzf', { 'do': {-> fzf#install()} } " Fuzzy text completion
 Plug 'junegunn/fzf.vim'
-" Plug 'ludovicchabant/vim-gutentags'              " A Vim plugin that manages your tag files
-                                                   " Uncomment after vim-treesitter becomes more stable
+" The following 2 plugins have eaten out my brain more times than I would like to admit.
+" Note to future self: DONT
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
+" Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
 
-" === Language-specific ===
+" === language-specific ===
 Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
-Plug 'Vimjas/vim-python-pep8-indent'               " A nicer python indentation style for Vim
+Plug 'Vimjas/vim-python-pep8-indent'               " A nicer Python indentation style for Vim
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
 Plug 'HerringtonDarkholme/yats.vim'                " TS Syntax
 
-" === Shortcuts ===
-Plug 'tpope/vim-fugitive'                          " A Git wrapper 'so awesome, it should be illegal'
-Plug 'tpope/vim-surround'                          " Quoting / parenthesizing made simple
-Plug 'tpope/vim-commentary'                        " Comment out stuff: gcc to comment a line; gc<motion> for magic
-Plug 'junegunn/vim-easy-align'                     " Simple, easy-to-ubse vim-alignment plugin
-Plug 'christoomey/vim-tmux-navigator'              " Seamless navigation between tmux panes and vim splits
+" === shortcuts ===
+Plug 'tpope/vim-surround'             " Quoting / parenthesizing made simple
+Plug 'tpope/vim-commentary'           " Comment out stuff: gcc to comment a line; gc<motion> for magic
+Plug 'junegunn/vim-easy-align'        " Simple, easy-to-ubse vim-alignment plugin
+Plug 'christoomey/vim-tmux-navigator' " Seamless navigation between tmux panes and vim splits
+Plug 'tpope/vim-fugitive'             " A Git wrapper 'so awesome, it should be illegal'
 
-" === Editor visuals ===
-Plug 'ap/vim-css-color'                            " Preview colours in source code while editing
-Plug 'itchyny/lightline.vim'                       " Lightweight statusline
-Plug 'mengelbrecht/lightline-bufferline'           " ...display the list of buffers in the lightline vim plugin
-Plug 'josa42/vim-lightline-coc'                    " Coc diagnostics indicator for lightline
-Plug 'preservim/nerdtree'                          " A tree explorer plugin for vim
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'vwxyutarooo/nerdtree-devicons-syntax'
+" === editor visuals ===
+Plug 'ap/vim-css-color'                  " Preview colours in source code while editing
+Plug 'itchyny/lightline.vim'             " Lightweight statusline
+Plug 'mengelbrecht/lightline-bufferline' " ...display the list of buffers in the lightline vim plugin
+Plug 'josa42/vim-lightline-coc'          " Coc diagnostics indicator for lightline
 
-" === Themes ===
-Plug 'sickill/vim-monokai'                         " Refined Monokai color scheme for Vim, inspired by Sublime text
-Plug 'haishanh/night-owl.vim'                      " Awesome Night-owl theme by Sarah Drasner
-Plug 'morhetz/gruvbox'                             " Retro groove color scheme for vim
-Plug 'joshdick/onedark.vim'                        " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
+" === themes ===
+Plug 'sickill/vim-monokai'    " Refined Monokai color scheme for Vim, inspired by Sublime text
+Plug 'haishanh/night-owl.vim' " Awesome Night-owl theme by Sarah Drasner
+Plug 'morhetz/gruvbox'        " Retro groove color scheme for vim
+Plug 'joshdick/onedark.vim'   " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
 call plug#end()
 
-" === General settings ===
+" === general ===
 let g:python3_host_prog = '/usr/local/bin/python3' " python for neovim
 set encoding=utf-8
 set splitbelow                                     " open horizontal splits at bottom
 set splitright                                     " open vertical splits at right
 set clipboard=unnamedplus
+" https://github.com/neoclide/coc.nvim/issues/2063#issuecomment-642183675
+set pumheight=10
 
 " === visuals ===
 if (has("termguicolors"))
@@ -125,7 +125,7 @@ set inccommand=nosplit
 
 " stuff to ignore when tab completing
 set wildoptions=pum
-set wildignore=*.o,*.obj,*~                                                     
+set wildignore=*.o,*.obj                                                     
 set wildignore+=*.exe
 set wildignore+=*.git*
 set wildignore+=*.meteor*
@@ -136,7 +136,7 @@ set wildignore+=*__pycache__*
 set wildignore+=*cache*
 set wildignore+=*node_modules*
 set wildignore+=**/node_modules/**
-set wildignore+=*ds_store*
+set wildignore+=*DS_Store*
 set wildignore+=*.gem
 
 " === file management ===
@@ -288,25 +288,50 @@ nmap <leader>0 <plug>lightline#bufferline#go(10)
 " don't use <leader> in insert mode and make vim a stuttering mess 
 let g:autopairsmapspace = "false"
 
+" === Easy Align ===
+" https://github.com/junegunn/vim-easy-align#quick-start-guide
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" === Tree-sitter === 
+" All modules are disabled by default and need to be activated explicitly in your init.vim
+" lua <<EOF
+" require'nvim-treesitter.configs'.setup {
+"   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+"   ignore_install = { },
+"   highlight = {
+"     enable = true,              -- false will disable the whole extension
+"     disable = { lua },
+"   },
+" }
+" EOF
+
 " " === Tags === 
-" " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
-" " Configure what a 'new project' means for gutentags
+" From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
+" Configure what a 'new project' means for gutentags
 " let g:gutentags_add_default_project_roots = 0
-" let g:gutentags_project_root = ['package.json', '.git']
+" let g:gutentags_project_root = ['package.json', '.git', 'Makefile']
+
 " " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
 " let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+
 " " Exclude certain files that are temporary
 " let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
+
 " " Save time instead of manually calling gutentags
 " let g:gutentags_generate_on_new = 1
 " let g:gutentags_generate_on_missing = 1
 " let g:gutentags_generate_on_write = 1
 " let g:gutentags_generate_on_empty_buffer = 0
+
 " " Let gutentags generate more info for the tags
 " let g:gutentags_ctags_extra_args = [
 "       \ '--tag-relative=yes',
 "       \ '--fields=+ailmnS',
 "       \ ]
+
 " " Make gutentags faster by avoiding certain files
 " let g:gutentags_ctags_exclude = [
 "       \ '*.git', '*.svg', '*.hg',
@@ -378,37 +403,6 @@ nnoremap <C-b> :Buffers<CR>
 " === vim-commentary ===
 " https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
 autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
-
-" === NerdTree ===
-nnoremap <leader>kl :NERDTreeToggle<CR>
-
-" https://github.com/preservim/nerdtree/issues/817#issuecomment-373001775
-let g:NERDTreeIgnore = ['^node_modules$', '^__pycache__$', '^.git$']
-
-" Start NERDTree when Vim starts with a directory argument.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
-
-" Exit Vim if NERDTree is the only window left.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
-
-" https://github.com/Xuyuanp/nerdtree-git-plugin
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-let g:NERDTreeGitStatusUseNerdFonts = 1 
-let g:NERDTreeGitStatusConcealBrackets = 1 
 
 " === coc.vim ===
 " coc config
