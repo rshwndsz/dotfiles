@@ -70,9 +70,9 @@ prompt pure
 
 # --- Aliases ---
 # C/C++ compilers
-alias gcc="gcc-10"
-alias cc="gcc-10"
-alias g++="g++-10"
+alias gcc="gcc-11"
+alias cc="gcc-11"
+alias g++="g++-11"
 # Tmux dev env
 alias dev="~/dotfiles/bin/dev-tmux.sh"
 # Backup obsidian on GitHub
