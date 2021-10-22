@@ -4,6 +4,8 @@ call plug#begin('~/.vim/plugged')
 Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
 Plug 'junegunn/fzf', { 'do': {-> fzf#install()} } " Fuzzy text completion
 Plug 'junegunn/fzf.vim'
+Plug 'vim-syntastic/syntastic' " For linters
+
 " The following 2 plugins have eaten out my brain more times than I would like to admit.
 " Note to future self: DONT
 " Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
@@ -14,6 +16,8 @@ Plug 'sheerun/vim-polyglot'                        " A solid language pack for v
 Plug 'Vimjas/vim-python-pep8-indent'               " A nicer Python indentation style for Vim
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go Development Plugin for Vim
 Plug 'HerringtonDarkholme/yats.vim'                " TS Syntax
+Plug 'jackguo380/vim-lsp-cxx-highlight'            " C++ syntax highlighting
+Plug 'rhysd/vim-clang-format'
 
 " === shortcuts ===
 Plug 'tpope/vim-surround'             " Quoting / parenthesizing made simple
@@ -268,9 +272,8 @@ augroup mygutentagsstatuslinerefresher
 augroup end
 
 let g:lightline#bufferline#unnamed = '[no name]'
-" add the buffer number to the buffer name
-" shows ordinal number
 let g:lightline#bufferline#show_number = 2
+let g:lightline#bufferline#shorten_path = 0 
 
 " plug mappings to switch to buffers using their ordinal number in the bufferline
 nmap <leader>1 <plug>lightline#bufferline#go(1)
@@ -471,7 +474,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
-nmap <F2> <Plug>(coc-rename)
+nmap <C-r> <Plug>(coc-rename)
 
 " Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
@@ -533,3 +536,19 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
+" clang-format the buffer
+nnoremap <leader>f :<c-u>clangformat<cr>
+
+" c++ syntax highlighting
+" refer https://chmanie.com/post/2020/07/17/modern-c-development-in-neovim/
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+
+" c++ linters
+let g:syntastic_cpp_checkers = ['cpplint']
+let g:syntastic_c_checkers = ['cpplint']
+let g:syntastic_cpp_cpplint_exec = 'cpplint'
+" the following two lines are optional. configure it to your liking!
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
