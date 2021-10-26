@@ -12,7 +12,8 @@
     "javascriptreact",
     "typescript.tsx",
     "graphql",
-    "yaml"
+    "yaml",
+    "cpp"
   ],
   "languageserver": {
     "ccls": {
@@ -33,10 +34,15 @@
         "client": {
           "snippetSupport": true
         },
-        "index": {
-          "onChange": true
-        },
         "highlight": { "lsRanges": true }
+      }
+    },
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "usePlaceholders": true
       }
     }
   }
