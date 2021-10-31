@@ -8,15 +8,15 @@ Plug 'vim-syntastic/syntastic'                    " For linters
 
 " The following 2 plugins have eaten out my brain more times than I would like to admit.
 " Note to future self: DONT
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
-" Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
+Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
 
 " === language-specific ===
-Plug 'sheerun/vim-polyglot'                        " A solid language pack for vim
 Plug 'Vimjas/vim-python-pep8-indent'               " A nicer Python indentation style for Vim
+Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}  " Go development plugin for vim
 Plug 'HerringtonDarkholme/yats.vim'                " TS Syntax
 Plug 'jackguo380/vim-lsp-cxx-highlight'            " C++ syntax highlighting
-Plug 'rhysd/vim-clang-format'
+Plug 'rhysd/vim-clang-format'                      " Vim plugin for clang-format, a formatter for C/C++, Objc, Java, JS, TS
 
 " === shortcuts ===
 Plug 'tpope/vim-surround'             " Quoting / parenthesizing made simple
@@ -65,63 +65,120 @@ set laststatus=2
 set noshowmode
 set showtabline=2
 
-let g:lightline = {
-      \ 'active': {
-        \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-        \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-      \ },
-      \ 'mode_map': {
-      \ 'n' : 'N',
-      \ 'i' : 'I',
-      \ 'r' : 'R',
-      \ 'v' : 'V',
-      \ 'V' : 'VL',
-      \ "\<c-v>": 'VB',
-      \ 'c' : 'C',
-      \ 's' : 'S',
-      \ 'S' : 'SL',
-      \ "\<c-s>": 'SB',
-      \ 't': 'T',
-      \ },
-      \ 'tabline': {
-      \ 'left': [['buffers']],
-      \ 'right': [[]], 
-      \ },
-      \ 'component_function': {
-      \ 'gitbranch': 'fugitive#head',
-      \ 'gutentags': 'gutentags#statusline',
-      \},
-      \ 'component_expand':{
-        \ 'buffers': 'lightline#bufferline#buffers',
-      \},
-      \ 'component_type': {
-      \ 'buffers': 'tabsel',
-      \},
-      \}
-" Register components
-call lightline#coc#register()
-
 if $ITERM_PROFILE ==# "Gruvbox"
-  let g:lightline#colorscheme = "wombat"
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
   " configuration from https://github.com/morhetz/gruvbox/wiki/configuration
   let g:gruvbox_contrast_dark="medium"
   colorscheme gruvbox
+  let g:lightline = {
+        \ 'colorscheme': 'seoul256',
+        \ 'active': {
+          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+        \ },
+        \ 'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'r' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<c-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<c-s>": 'SB',
+        \ 't': 'T',
+        \ },
+        \ 'tabline': {
+        \ 'left': [['buffers']],
+        \ 'right': [[]], 
+        \ },
+        \ 'component_function': {
+        \ 'gitbranch': 'fugitive#head',
+        \ 'gutentags': 'gutentags#statusline',
+        \},
+        \ 'component_expand':{
+          \ 'buffers': 'lightline#bufferline#buffers',
+        \},
+        \ 'component_type': {
+        \ 'buffers': 'tabsel',
+        \},
+        \}
 elseif $ITERM_PROFILE ==# "Monokai"
-  let g:lightline#colorscheme = "molokai" 
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
   colorscheme monokai
+  let g:lightline = {
+        \ 'colorscheme': 'molokai',
+        \ 'active': {
+          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+        \ },
+        \ 'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'r' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<c-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<c-s>": 'SB',
+        \ 't': 'T',
+        \ },
+        \ 'tabline': {
+        \ 'left': [['buffers']],
+        \ 'right': [[]], 
+        \ },
+        \ 'component_function': {
+        \ 'gitbranch': 'fugitive#head',
+        \ 'gutentags': 'gutentags#statusline',
+        \},
+        \ 'component_expand':{
+          \ 'buffers': 'lightline#bufferline#buffers',
+        \},
+        \ 'component_type': {
+        \ 'buffers': 'tabsel',
+        \},
+        \}
 else 
-  let g:lightline#colorscheme = "onedark" 
-  call lightline#init()
-  call lightline#colorscheme()
-  call lightline#update()
   colorscheme onedark
+  let g:lightline = {
+        \ 'colorscheme': 'onedark',
+        \ 'active': {
+          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+        \ },
+        \ 'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'r' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<c-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<c-s>": 'SB',
+        \ 't': 'T',
+        \ },
+        \ 'tabline': {
+        \ 'left': [['buffers']],
+        \ 'right': [[]], 
+        \ },
+        \ 'component_function': {
+        \ 'gitbranch': 'fugitive#head',
+        \ 'gutentags': 'gutentags#statusline',
+        \},
+        \ 'component_expand':{
+          \ 'buffers': 'lightline#bufferline#buffers',
+        \},
+        \ 'component_type': {
+        \ 'buffers': 'tabsel',
+        \},
+        \}
 endif
+
+" Register components
+call lightline#coc#register()
 
 " === lightline-bufferline ===
 let g:lightline#bufferline#unnamed = '[no name]'
@@ -149,8 +206,7 @@ autocmd bufwritepost,textchanged,textchangedi * call lightline#update()
 " === spacing & indentation ===
 " adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 " enable filetype plugins
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 " configure backspace so it acts as it should act
 set backspace=indent,eol,start confirm
 set whichwrap+=<,>,h,l
@@ -171,7 +227,7 @@ set smarttab
 " 1 tab <-> 2 spaces
 set shiftwidth=2
 set tabstop=2
-
+au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
 " === line numbering ===
 set number
 " " toggle relative numbering, and set to absolute on loss of focus or insert mode
@@ -295,11 +351,15 @@ let g:tmux_navigator_save_on_switch = 2
 autocmd filetype cpp,c,objc nmap <buffer> <leader>cm :w <cr> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <cr>
 
 " === go ===
+" disable vim-go's :GoDef short cut
+" This is done by CoC's gd
+let g:go_def_mapping_enabled = 0
 " see - https://tpaschalis.github.io/vim-go-setup/
 let g:go_fmt_command = "goimports"    " run goimports along gofmt on each save
+let g:go_fmt_autosave = 1
 let g:go_auto_type_info = 1           " automatically get signature/type info for object under cursor
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md#cocnvim
-autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+" autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 " === misc ===
 " open this file: vim-options 
@@ -328,72 +388,72 @@ nmap ga <Plug>(EasyAlign)
 
 " === Tree-sitter === 
 " All modules are disabled by default and need to be activated explicitly in your init.vim
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-"   ignore_install = { },
-"   highlight = {
-"     enable = true,              -- false will disable the whole extension
-"     disable = { lua },
-"   },
-" }
-" EOF
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ignore_install = { },
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+    disable = { lua },
+  },
+}
+EOF
 
-" " === Tags === 
+" === Tags === 
 " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
 " Configure what a 'new project' means for gutentags
-" let g:gutentags_add_default_project_roots = 0
-" let g:gutentags_project_root = ['package.json', '.git', 'Makefile']
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git', 'Makefile']
 
-" " To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
-" let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+" To avoid adding tags and tags.lock to the .gitignore every single project configure it outside
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
 
-" " Exclude certain files that are temporary
-" let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
+" Exclude certain files that are temporary
+let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
 
-" " Save time instead of manually calling gutentags
-" let g:gutentags_generate_on_new = 1
-" let g:gutentags_generate_on_missing = 1
-" let g:gutentags_generate_on_write = 1
-" let g:gutentags_generate_on_empty_buffer = 0
+" Save time instead of manually calling gutentags
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
 
-" " Let gutentags generate more info for the tags
-" let g:gutentags_ctags_extra_args = [
-"       \ '--tag-relative=yes',
-"       \ '--fields=+ailmnS',
-"       \ ]
+" Let gutentags generate more info for the tags
+let g:gutentags_ctags_extra_args = [
+      \ '--tag-relative=yes',
+      \ '--fields=+ailmnS',
+      \ ]
 
-" " Make gutentags faster by avoiding certain files
-" let g:gutentags_ctags_exclude = [
-"       \ '*.git', '*.svg', '*.hg',
-"       \ 'dist',
-"       \ 'node_modules',
-"       \ 'cache',
-"       \ '*-lock.json',
-"       \ '*.lock',
-"       \ '*bundle*.js',
-"       \ '*build*.js',
-"       \ '*.json',
-"       \ '*.min.*',
-"       \ '*.map',
-"       \ '*.bak',
-"       \ '*.zip',
-"       \ '*.pyc',
-"       \ '*.class',
-"       \ '*.csproj',
-"       \ '*.tmp',
-"       \ '*.csproj.user',
-"       \ '*.cache',
-"       \ '*.pdb',
-"       \ 'tags*',
-"       \ 'cscope.*',
-"       \ '*.exe', '*.dll',
-"       \ '*.mp3', '*.ogg', '*.flac',
-"       \ '*.swp', '*.swo',
-"       \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
-"       \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
-"       \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
-"       \ ] 
+" Make gutentags faster by avoiding certain files
+let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ 'dist',
+      \ 'node_modules',
+      \ 'cache',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ] 
 
 " === fzf.vim ===
 " Layout
@@ -506,7 +566,7 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
-nmap <C-r> <Plug>(coc-rename)
+nmap cr <Plug>(coc-rename)
 
 " Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
