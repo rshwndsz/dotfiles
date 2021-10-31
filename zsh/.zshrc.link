@@ -50,6 +50,7 @@ unset __conda_setup
 
 # See https://github.com/golang/go/wiki/SettingGOPATH#zsh
 export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 
 # Use exa instead of ls
 alias ls=exa
@@ -86,3 +87,4 @@ export NVM_DIR="$HOME/.nvm"
 # https://hydra.cc/docs/tutorials/basic/running_your_app/tab_completion/ 
 compinit
 autoload -Uz bashcompinit && bashcompinit
+
