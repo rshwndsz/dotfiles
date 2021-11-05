@@ -32,6 +32,7 @@ Plug 'mengelbrecht/lightline-bufferline' " ...display the list of buffers in the
 Plug 'josa42/vim-lightline-coc'          " Coc diagnostics indicator for lightline
 Plug 'kyazdani42/nvim-web-devicons'      " for file icons
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'lambdalisue/nerdfont.vim'          " Fundamental plugin to handle Nerd fonts in Vim
 
 " === themes ===
 Plug 'sickill/vim-monokai'    " Refined Monokai color scheme for Vim, inspired by Sublime text
@@ -65,6 +66,16 @@ set laststatus=2
 set noshowmode
 set showtabline=2
 
+" === lightline-bufferline ===
+let g:lightline#bufferline#unnamed = '[no name]'
+let g:lightline#bufferline#show_number = 2 
+let g:lightline#bufferline#shorten_path = 1 
+let g:lightline#bufferline#smart_path = 0
+let g:lightline#bufferline#enable_devicons = 1
+let g:lightline#bufferline#enable_nerdfont = 1
+let g:lightline#bufferline#unicode_symbols = 1
+
+" TODO Fix this repeating circus
 if $ITERM_PROFILE ==# "Gruvbox"
   " configuration from https://github.com/morhetz/gruvbox/wiki/configuration
   let g:gruvbox_contrast_dark="medium"
@@ -95,6 +106,7 @@ if $ITERM_PROFILE ==# "Gruvbox"
         \ 'component_function': {
         \ 'gitbranch': 'fugitive#head',
         \ 'gutentags': 'gutentags#statusline',
+        \ 'filename': 'LightlineTruncatedFileName'
         \},
         \ 'component_expand':{
           \ 'buffers': 'lightline#bufferline#buffers',
@@ -131,6 +143,7 @@ elseif $ITERM_PROFILE ==# "Monokai"
         \ 'component_function': {
         \ 'gitbranch': 'fugitive#head',
         \ 'gutentags': 'gutentags#statusline',
+        \ 'filename': 'LightlineTruncatedFileName'
         \},
         \ 'component_expand':{
           \ 'buffers': 'lightline#bufferline#buffers',
@@ -144,7 +157,7 @@ else
   let g:lightline = {
         \ 'colorscheme': 'onedark',
         \ 'active': {
-          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+          \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
           \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
         \ },
         \ 'mode_map': {
@@ -167,6 +180,7 @@ else
         \ 'component_function': {
         \ 'gitbranch': 'fugitive#head',
         \ 'gutentags': 'gutentags#statusline',
+        \ 'filename': 'LightlineTruncatedFileName'
         \},
         \ 'component_expand':{
           \ 'buffers': 'lightline#bufferline#buffers',
@@ -176,16 +190,22 @@ else
         \},
         \}
 endif
+" Add to lightline config if you need 
+" \ 'separator': { 'left': '', 'right': '' },
+" \ 'subseparator': { 'left': '', 'right': '' },
+
+" https://github.com/itchyny/lightline.vim/issues/532
+function! LightlineTruncatedFileName()
+let l:filePath = expand('%')
+    if winwidth(0) > 100
+        return l:filePath
+    else
+        return pathshorten(l:filePath)
+    endif
+endfunction
 
 " Register components
 call lightline#coc#register()
-
-" === lightline-bufferline ===
-let g:lightline#bufferline#unnamed = '[no name]'
-let g:lightline#bufferline#show_number = 2
-let g:lightline#bufferline#shorten_path = 1 
-let g:lightline#bufferline#enable_devicons = 1
-let g:lightline#bufferline#enable_nerdfont = 1
 
 autocmd VimEnter * call SetupLightlineColors()
 function SetupLightlineColors() abort
@@ -392,9 +412,28 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   ignore_install = { },
+  -- "Consistent sytax highlighting"
   highlight = {
     enable = true,              -- false will disable the whole extension
-    disable = { lua },
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false
+  },
+  -- Incremental Selection
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  -- Indentation based on =
+  indent = {
+    enable = true
   },
 }
 EOF
@@ -490,6 +529,7 @@ command! -bang -nargs=? -complete=dir Files
 nnoremap <C-p> :GFiles<CR> 
 nnoremap <leader>fi :Files<CR>
 nnoremap <C-b> :Buffers<CR>
+nnoremap <C-f> :Rg<CR>
 
 " === vim-commentary ===
 " https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
@@ -546,13 +586,18 @@ nmap <silent> [c <Plug>(coc-diagnostic-prev)
 nmap <silent> ]c <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
+" Open definition in new tab
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" https://github.com/neoclide/coc.nvim/issues/1249
+" Open definition in new vertical split
+nmap <silent> gs :vsp<CR><Plug>(coc-definition)
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+
+" Show documentation in preview window
+nnoremap <silent> gw :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -709,7 +754,7 @@ require'nvim-tree'.setup {
     -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
     side = 'left',
     -- if true the tree will resize itself after opening a file
-    auto_resize = false,
+    auto_resize = true,
     mappings = {
       -- custom only false will merge the list with the default mappings
       -- if true, it will only use your list to set the mappings

@@ -1,7 +1,6 @@
 {
   "tsserver.log": "verbose",
   "suggest.noselect": false,
-  "eslint.filetypes": ["typescript", "javascript"],
   "eslint.run": "onSave",
   "prettier.eslintIntegration": true,
   "coc.preferences.formatOnSaveFiletypes": [
@@ -13,7 +12,8 @@
     "typescript.tsx",
     "graphql",
     "yaml",
-    "cpp"
+    "cpp",
+    "rust"
   ],
   "languageserver": {
     "ccls": {
@@ -45,5 +45,8 @@
         "usePlaceholders": true
       }
     }
-  }
+  },
+  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.completion.autoimport.enable": true,
+  "rust-analyzer.rustfmt.enableRangeFormatting": true
 }
