@@ -35,22 +35,23 @@ fi
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
- __conda_setup="$('/Users/Russel/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/Russel/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/Russel/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/Russel/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+ # __conda_setup="$('/Users/Russel/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+ #    eval "$__conda_setup"
+# else
+ #    if [ -f "/Users/Russel/miniconda3/etc/profile.d/conda.sh" ]; then
+ #        . "/Users/Russel/miniconda3/etc/profile.d/conda.sh"
+ #    else
+ #        export PATH="/Users/Russel/miniconda3/bin:$PATH"
+ #    fi
+# fi
+# unset __conda_setup
 # <<< conda initialize <<<
 
 # See https://github.com/golang/go/wiki/SettingGOPATH#zsh
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+export GO111MODULE=on
 
 # Use exa instead of ls
 alias ls=exa
@@ -60,14 +61,14 @@ alias ls=exa
 export RBENV_ROOT=/usr/local/var/rbenv
 
 # Load rbenv automatically
-eval "$(rbenv init -)"
+# eval "$(rbenv init -)"
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Set $EDITOR
 export EDITOR=nvim
-
-# pure prompt
-autoload -U promptinit; promptinit
-prompt pure
 
 # --- Aliases ---
 # C/C++ compilers
@@ -79,12 +80,9 @@ alias dev="~/dotfiles/bin/dev-tmux.sh"
 # Backup obsidian on GitHub
 alias bakobsidian="bash ~/dotfiles/bin/backup-obsidian.sh"
 
-
-export NVM_DIR="$HOME/.nvm"
-  [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
 # https://hydra.cc/docs/tutorials/basic/running_your_app/tab_completion/ 
-compinit
-autoload -Uz bashcompinit && bashcompinit
+# compinit
+# autoload -Uz bashcompinit && bashcompinit
 
+# Prompt! -> https://starship.rs/
+eval "$(starship init zsh)"
