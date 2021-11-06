@@ -1,3 +1,10 @@
 
+theme = "dark_plus"
+
 [lsp]
 display-messages = true
+
+[[language]]
+# https://github.com/helix-editor/helix/issues/778
+name = "c"
+language-server = { command = "clangd", args=["--enable-config" ] }
