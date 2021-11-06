@@ -1,4 +1,6 @@
 " My neovim config file
+
+" === Plugins ===
 call plug#begin('~/.vim/plugged')
 " === brains ===
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }           " Intellisense engine form vim8 & neovim, full lsp as vscode
@@ -41,6 +43,7 @@ Plug 'joshdick/onedark.vim'                                 " A dark (n)vim colo
 Plug 'tomasiser/vim-code-dark'                              " Dark color scheme inspired by Dark+ in VSCode
 call plug#end()
 
+
 " === general ===
 let g:python3_host_prog = '/usr/local/bin/python3' " python for neovim
 set encoding=utf-8
@@ -50,215 +53,33 @@ set clipboard=unnamedplus
 " https://github.com/neoclide/coc.nvim/issues/2063#issuecomment-642183675
 set pumheight=10
 
+
 " === visuals ===
 if (has("termguicolors"))
   set termguicolors
 endif
 syntax enable  " enable syntax highlighting
 set cursorline " highlighting that moves with the cursor
-
-" === colorscheme ===
-" === lightline ===
 if !has('gui_running')
   set t_co=256
 endif
-set laststatus=2
-set noshowmode
-set showtabline=2
 
-" === lightline-bufferline ===
-let g:lightline#bufferline#unnamed = '[no name]'
-let g:lightline#bufferline#show_number = 2 
-let g:lightline#bufferline#shorten_path = 1 
-let g:lightline#bufferline#smart_path = 0
-let g:lightline#bufferline#enable_devicons = 1
-let g:lightline#bufferline#enable_nerdfont = 1
-let g:lightline#bufferline#unicode_symbols = 1
-
-" TODO Fix this repeating circus
 if $ITERM_PROFILE ==# "Gruvbox"
-  " configuration from https://github.com/morhetz/gruvbox/wiki/configuration
+  " https://github.com/morhetz/gruvbox/wiki/configuration
   let g:gruvbox_contrast_dark="medium"
   colorscheme gruvbox
-  let g:lightline = {
-        \ 'colorscheme': 'seoul256',
-        \ 'active': {
-          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-        \ },
-        \ 'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'r' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<c-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<c-s>": 'SB',
-        \ 't': 'T',
-        \ },
-        \ 'tabline': {
-        \ 'left': [['buffers']],
-        \ 'right': [[]], 
-        \ },
-        \ 'component_function': {
-        \ 'gitbranch': 'fugitive#head',
-        \ 'gutentags': 'gutentags#statusline',
-        \ 'filename': 'LightlineTruncatedFileName'
-        \},
-        \ 'component_expand':{
-          \ 'buffers': 'lightline#bufferline#buffers',
-        \},
-        \ 'component_type': {
-        \ 'buffers': 'tabsel',
-        \},
-        \}
+  let LIGHTLINE_COLORSCHEME='seoul256'
 elseif $ITERM_PROFILE ==# "Monokai"
   colorscheme monokai
-  let g:lightline = {
-        \ 'colorscheme': 'molokai',
-        \ 'active': {
-          \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-        \ },
-        \ 'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'r' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<c-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<c-s>": 'SB',
-        \ 't': 'T',
-        \ },
-        \ 'tabline': {
-        \ 'left': [['buffers']],
-        \ 'right': [[]], 
-        \ },
-        \ 'component_function': {
-        \ 'gitbranch': 'fugitive#head',
-        \ 'gutentags': 'gutentags#statusline',
-        \ 'filename': 'LightlineTruncatedFileName'
-        \},
-        \ 'component_expand':{
-          \ 'buffers': 'lightline#bufferline#buffers',
-        \},
-        \ 'component_type': {
-        \ 'buffers': 'tabsel',
-        \},
-        \}
+  let &LIGHTLINE_COLORSCHEME='molokai'
 elseif $ITERM_PROFILE ==# "Iosevka"
   colorscheme codedark
-  let g:lightline = {
-        \ 'colorscheme': 'wombat',
-        \ 'active': {
-          \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-        \ },
-        \ 'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'r' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<c-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<c-s>": 'SB',
-        \ 't': 'T',
-        \ },
-        \ 'tabline': {
-        \ 'left': [['buffers']],
-        \ 'right': [[]], 
-        \ },
-        \ 'component_function': {
-        \ 'gitbranch': 'fugitive#head',
-        \ 'gutentags': 'gutentags#statusline',
-        \ 'filename': 'LightlineTruncatedFileName'
-        \},
-        \ 'component_expand':{
-          \ 'buffers': 'lightline#bufferline#buffers',
-        \},
-        \ 'component_type': {
-        \ 'buffers': 'tabsel',
-        \},
-        \}
+  let LIGHTLINE_COLORSCHEME='wombat'
 else 
   colorscheme onedark
-  let g:lightline = {
-        \ 'colorscheme': 'onedark',
-        \ 'active': {
-          \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
-        \ },
-        \ 'mode_map': {
-        \ 'n' : 'N',
-        \ 'i' : 'I',
-        \ 'r' : 'R',
-        \ 'v' : 'V',
-        \ 'V' : 'VL',
-        \ "\<c-v>": 'VB',
-        \ 'c' : 'C',
-        \ 's' : 'S',
-        \ 'S' : 'SL',
-        \ "\<c-s>": 'SB',
-        \ 't': 'T',
-        \ },
-        \ 'tabline': {
-        \ 'left': [['buffers']],
-        \ 'right': [[]], 
-        \ },
-        \ 'component_function': {
-        \ 'gitbranch': 'fugitive#head',
-        \ 'gutentags': 'gutentags#statusline',
-        \ 'filename': 'LightlineTruncatedFileName'
-        \},
-        \ 'component_expand':{
-          \ 'buffers': 'lightline#bufferline#buffers',
-        \},
-        \ 'component_type': {
-        \ 'buffers': 'tabsel',
-        \},
-        \}
+  let LIGHTLINE_COLORSCHEME='onedark'
 endif
-" Add to lightline config if you need 
-" \ 'separator': { 'left': '', 'right': '' },
-" \ 'subseparator': { 'left': '', 'right': '' },
 
-" https://github.com/itchyny/lightline.vim/issues/532
-function! LightlineTruncatedFileName()
-let l:filePath = expand('%')
-    if winwidth(0) > 100
-        return l:filePath
-    else
-        return pathshorten(l:filePath)
-    endif
-endfunction
-
-" Register components
-call lightline#coc#register()
-
-autocmd VimEnter * call SetupLightlineColors()
-function SetupLightlineColors() abort
-  " transparent background in statusbar
-  let l:palette = lightline#palette()
-
-  let l:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
-  let l:palette.inactive.middle = l:palette.normal.middle
-  let l:palette.tabline.middle = l:palette.normal.middle
-
-  call lightline#colorscheme()
-endfunction
-
-" if you're adding the buffers to the bottom status bar, the `modified` 
-" indicator will not be updated immediately. to work around this ->
-autocmd bufwritepost,textchanged,textchangedi * call lightline#update()
 
 " === spacing & indentation ===
 " adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -285,9 +106,11 @@ set smarttab
 set shiftwidth=2
 set tabstop=2
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
+
+
 " === line numbering ===
 set number
-" " toggle relative numbering, and set to absolute on loss of focus or insert mode
+" Uncomment below to Toggle relative numbering, and set to absolute on loss of focus or insert mode
 " autocmd insertenter * :set nornu
 " autocmd insertleave * :set rnu
 " " disable relative numbering while debugging - when source window loses focus
@@ -299,10 +122,12 @@ set number
 "   endif 
 " endfunction 
 
+
 " === folds ===
 set foldmethod=indent   " fold based on indent
 set foldnestmax=3       " deepest fold is 3 levels
 set nofoldenable        " don't fold by default
+
 
 " === search & replace ===
 " ignorecase when searching
@@ -333,6 +158,7 @@ set wildignore+=**/node_modules/**
 set wildignore+=*DS_Store*
 set wildignore+=*.gem
 
+
 " === file management ===
 set noswapfile
 set nobackup
@@ -345,30 +171,19 @@ autocmd focusgained,bufenter,cursorhold,cursorholdi * if mode() != 'c' | checkti
 autocmd filechangedshellpost *
       \ echohl warningmsg | echo "file changed on disk. buffer reloaded." | echohl none
 
+
 " === scrolling ===
 set scrolloff=8 " start scrolling when we're 8 lines away from margins
+
 
 " === performance ===
 set lazyredraw " fix slow scrolling that occurs when using mouse and relative numbers
 
-" === fix annoyances ===
-" to auto-close the method-preview window
-autocmd insertleave,completedone * if pumvisible() == 0 | pclose | endif
-" diable auto-comment
-" https://vim.fandom.com/wiki/disable_automatic_comment_insertion
-autocmd filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" === keyboard bindings ===
+" === major keyboard bindings ===
 let mapleader = " "
 let maplocalleader = ","  " https://github.com/jalvesaq/nvim-r/issues/101#issuecomment-242395913 
 :nmap <space> :
-
-" === vim-easy-align ===
-" start interactive easyalign in visual mode (e.g. vipga): easy-aligned
-xmap ga <plug>(easyalign)
-" start interactive easyalign for a motion/text object (e.g. gaip)
-nmap ga <plug>(easyalign)
-
 
 " === some of my fav spacemacs bindings ===
 " close buffer in focus
@@ -387,25 +202,32 @@ nnoremap <leader>wj <c-w>j
 nnoremap <leader>wk <c-w>k
 nnoremap <leader>wl <c-w>l
 
-" plug mappings to switch to buffers using their ordinal number in the bufferline
-nmap <leader>1 <plug>lightline#bufferline#go(1)
-nmap <leader>2 <plug>lightline#bufferline#go(2)
-nmap <leader>3 <plug>lightline#bufferline#go(3)
-nmap <leader>4 <plug>lightline#bufferline#go(4)
-nmap <leader>5 <plug>lightline#bufferline#go(5)
-nmap <leader>6 <plug>lightline#bufferline#go(6)
-nmap <leader>7 <plug>lightline#bufferline#go(7)
-nmap <leader>8 <plug>lightline#bufferline#go(8)
-nmap <leader>9 <plug>lightline#bufferline#go(9)
-nmap <leader>0 <plug>lightline#bufferline#go(10)
+
+" === fix annoyances ===
+" to auto-close the method-preview window
+autocmd insertleave,completedone * if pumvisible() == 0 | pclose | endif
+" diable auto-comment
+" https://vim.fandom.com/wiki/disable_automatic_comment_insertion
+autocmd filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
+" === misc ===
+" open this file: vim-options 
+nnoremap <leader>vo :e ~/.config/nvim/init.vim<cr>
+" reload config file 
+nnoremap <c-s> :w<cr>:source ~/.config/nvim/init.vim<cr>
+
+
+" === plugin settings ===
 
 " === tmux ===
 " write all buffers before navigating from vim to tmux pane
 let g:tmux_navigator_save_on_switch = 2
 
+
 " === c++ ===
 " compile current file: compile
 autocmd filetype cpp,c,objc nmap <buffer> <leader>cm :w <cr> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <cr>
+
 
 " === go ===
 " disable vim-go's :GoDef short cut
@@ -418,23 +240,106 @@ let g:go_auto_type_info = 1           " automatically get signature/type info fo
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md#cocnvim
 " autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
-" === misc ===
-" open this file: vim-options 
-nnoremap <leader>vo :e ~/.config/nvim/init.vim<cr>
-" reload config file 
-nnoremap <c-s> :w<cr>:source ~/.config/nvim/init.vim<cr>
 
-" === plugin settings ===
+" === Lightline ===
+set laststatus=2
+set noshowmode
+set showtabline=2
 
-augroup mygutentagsstatuslinerefresher
-  autocmd!
-  autocmd user gutentagsupdating call lightline#update()
-  autocmd user gutentagsupdated call lightline#update()
-augroup end
+" Add to lightline config if you need 
+" \ 'separator': { 'left': '', 'right': '' },
+" \ 'subseparator': { 'left': '', 'right': '' },
+let g:lightline = {
+  \ 'colorscheme': LIGHTLINE_COLORSCHEME,
+  \ 'active': {
+    \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+  \ },
+  \ 'mode_map': {
+    \ 'n' : 'N',
+    \ 'i' : 'I',
+    \ 'r' : 'R',
+    \ 'v' : 'V',
+    \ 'V' : 'VL',
+    \ "\<c-v>": 'VB',
+    \ 'c' : 'C',
+    \ 's' : 'S',
+    \ 'S' : 'SL',
+    \ "\<c-s>": 'SB',
+    \ 't': 'T',
+  \ },
+  \ 'tabline': {
+    \ 'left': [['buffers']],
+    \ 'right': [[]], 
+  \ },
+  \ 'component_function': {
+    \ 'gitbranch': 'fugitive#head',
+    \ 'gutentags': 'gutentags#statusline',
+    \ 'filename': 'LightlineTruncatedFileName'
+  \},
+  \ 'component_expand':{
+    \ 'buffers': 'lightline#bufferline#buffers',
+  \},
+  \ 'component_type': {
+    \ 'buffers': 'tabsel',
+  \},
+\}
+
+" https://github.com/itchyny/lightline.vim/issues/532
+function! LightlineTruncatedFileName()
+let l:filePath = expand('%')
+    if winwidth(0) > 100
+        return l:filePath
+    else
+        return pathshorten(l:filePath)
+    endif
+endfunction
+
+" Register components
+call lightline#coc#register()
+
+autocmd VimEnter * call SetupLightlineColors()
+function SetupLightlineColors() abort
+  " transparent background in statusbar
+  let l:palette = lightline#palette()
+
+  let l:palette.normal.middle = [ [ 'NONE', 'NONE', 'NONE', 'NONE' ] ]
+  let l:palette.inactive.middle = l:palette.normal.middle
+  let l:palette.tabline.middle = l:palette.normal.middle
+
+  call lightline#colorscheme()
+endfunction
+
+" if you're adding the buffers to the bottom status bar, the `modified` 
+" indicator will not be updated immediately. to work around this ->
+autocmd bufwritepost,textchanged,textchangedi * call lightline#update()
+
+" === lightline-bufferline ===
+let g:lightline#bufferline#unnamed = '[no name]'
+let g:lightline#bufferline#show_number = 2 
+let g:lightline#bufferline#shorten_path = 1 
+let g:lightline#bufferline#smart_path = 0
+let g:lightline#bufferline#enable_devicons = 1
+let g:lightline#bufferline#enable_nerdfont = 1
+let g:lightline#bufferline#unicode_symbols = 1
+
+" plug mappings to switch to buffers using their ordinal number in the bufferline
+nmap <leader>1 <plug>lightline#bufferline#go(1)
+nmap <leader>2 <plug>lightline#bufferline#go(2)
+nmap <leader>3 <plug>lightline#bufferline#go(3)
+nmap <leader>4 <plug>lightline#bufferline#go(4)
+nmap <leader>5 <plug>lightline#bufferline#go(5)
+nmap <leader>6 <plug>lightline#bufferline#go(6)
+nmap <leader>7 <plug>lightline#bufferline#go(7)
+nmap <leader>8 <plug>lightline#bufferline#go(8)
+nmap <leader>9 <plug>lightline#bufferline#go(9)
+nmap <leader>0 <plug>lightline#bufferline#go(10)
+
 
 " === auto-pairs ===
 " don't use <leader> in insert mode and make vim a stuttering mess 
 let g:autopairsmapspace = "false"
+
 
 " === Easy Align ===
 " https://github.com/junegunn/vim-easy-align#quick-start-guide
@@ -442,6 +347,7 @@ let g:autopairsmapspace = "false"
 xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
 
 " === Tree-sitter === 
 " All modules are disabled by default and need to be activated explicitly in your init.vim
@@ -474,6 +380,7 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 EOF
+
 
 " === Tags === 
 " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
@@ -531,9 +438,20 @@ let g:gutentags_ctags_exclude = [
       \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
       \ ] 
 
+" Gutentags + Lightline 
+augroup mygutentagsstatuslinerefresher
+  autocmd!
+  autocmd user gutentagsupdating call lightline#update()
+  autocmd user gutentagsupdated call lightline#update()
+augroup end
+
+
 " === fzf.vim ===
 " Layout
-let g:fzf_layout = { 'down': '~30%' }
+" Default is a floating window. Uncomment to change.
+" - https://stackoverflow.com/a/63912546
+" let g:fzf_layout = { 'down': '~30%' }
+
 " Customize fzf colors to match your color scheme
 " - fzf#wrap translates this to a set of `--color` options
 let g:fzf_colors =
@@ -556,21 +474,21 @@ let g:fzf_colors =
 command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
-" Mappings
-" Inspired by https://github.com/junegunn/fzf.vim/issues/563#issuecomment-486342795
-" By default
-" <C-t> tab split
-" <C-x> split
-" <C-v> vsplit
 " Since I'm used to ctrl-p
-nnoremap <C-p> :GFiles<CR> 
-nnoremap <leader>fi :Files<CR>
+nnoremap <C-p> :Files<CR> 
+nnoremap <leader>fi :GFiles<CR>
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-f> :Rg<CR>
+
+" options
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
 
 " === vim-commentary ===
 " https://github.com/tpope/vim-commentary/issues/15#issuecomment-23127749
 autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
+
 
 " === coc.vim ===
 " coc config
@@ -581,6 +499,8 @@ let g:coc_global_extensions = [
       \ 'coc-eslint', 
       \ 'coc-prettier', 
       \ 'coc-json', 
+      \ 'coc-rust-analyzer',
+      \ 'coc-jedi',
       \ ]
 
 " Setup Prettier
@@ -710,9 +630,6 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" clang-format the buffer
-" nnoremap <leader>f :<c-u>ClangFormat<cr>
-
 " c++ syntax highlighting
 " refer https://chmanie.com/post/2020/07/17/modern-c-development-in-neovim/
 let g:cpp_class_scope_highlight = 1
@@ -726,6 +643,7 @@ let g:syntastic_cpp_cpplint_exec = 'cpplint'
 " the following two lines are optional. configure it to your liking!
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
 
 " === nvim-tree ===
 lua <<EOF
@@ -880,4 +798,3 @@ set termguicolors " this variable must be enabled for colors to be applied prope
 
 " a list of groups can be found at `:help nvim_tree_highlight`
 highlight NvimTreeFolderIcon guibg=blue
-
