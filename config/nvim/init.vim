@@ -16,6 +16,7 @@ Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}           " Go development plu
 Plug 'HerringtonDarkholme/yats.vim'                         " TS Syntax
 Plug 'jackguo380/vim-lsp-cxx-highlight'                     " C++ syntax highlighting
 Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format, a formatter for C/C++, Objc, Java, JS, TS
+Plug 'kevinoid/vim-jsonc'                                   " Vim syntax highlighting for JSON with C-style and block style comments
 
 " === shortcuts ===
 Plug 'tpope/vim-surround'                                   " Quoting / parenthesizing made simple
@@ -105,22 +106,15 @@ set smarttab
 " 1 tab <-> 2 spaces
 set shiftwidth=2
 set tabstop=2
+
+
+" === Language specific stuff ===
 au BufNewFile,BufRead *.go setlocal noet ts=4 sw=4 sts=4
+autocmd BufRead,BufNewFile *.json set filetype=jsonc
 
 
 " === line numbering ===
 set number
-" Uncomment below to Toggle relative numbering, and set to absolute on loss of focus or insert mode
-" autocmd insertenter * :set nornu
-" autocmd insertleave * :set rnu
-" " disable relative numbering while debugging - when source window loses focus
-" autocmd bufleave * :set nornu
-" autocmd bufenter * cal SetRNU()
-" function! SetRNU()
-"   if(mode() != 'i')
-"     set rnu
-"   endif 
-" endfunction 
 
 
 " === folds ===
@@ -224,12 +218,7 @@ nnoremap <c-s> :w<cr>:source ~/.config/nvim/init.vim<cr>
 let g:tmux_navigator_save_on_switch = 2
 
 
-" === c++ ===
-" compile current file: compile
-autocmd filetype cpp,c,objc nmap <buffer> <leader>cm :w <cr> :!g++ -std=c++17 % -o %<.exe && ./%<.exe <cr>
-
-
-" === go ===
+" === vim-go ===
 " disable vim-go's :GoDef short cut
 " This is done by CoC's gd
 let g:go_def_mapping_enabled = 0
@@ -246,14 +235,11 @@ set laststatus=2
 set noshowmode
 set showtabline=2
 
-" Add to lightline config if you need 
-" \ 'separator': { 'left': '', 'right': '' },
-" \ 'subseparator': { 'left': '', 'right': '' },
 let g:lightline = {
   \ 'colorscheme': LIGHTLINE_COLORSCHEME,
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['gutentags'], ],
   \ },
   \ 'mode_map': {
     \ 'n' : 'N',
@@ -630,12 +616,15 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
-" c++ syntax highlighting
+
+" === vim-lsp-cxx-highlight ===
 " refer https://chmanie.com/post/2020/07/17/modern-c-development-in-neovim/
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 
+
+" === Syntastic === 
 " c++ linters
 let g:syntastic_cpp_checkers = ['cpplint']
 let g:syntastic_c_checkers = ['cpplint']
