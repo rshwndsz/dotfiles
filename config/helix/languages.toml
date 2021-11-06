@@ -1,0 +1,14 @@
+
+[[language]]
+# https://github.com/helix-editor/helix/issues/778
+name = "c"
+language-server = { command = "clangd", args=["--enable-config"] }
+
+[[language]]
+name = "cpp"
+language-server = { command = "clangd", args=["--enable-config"] }
+
+[[language]]
+name = "go"
+auto-format = true
+language-server = { command = "gopls" }
