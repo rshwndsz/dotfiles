@@ -1,44 +1,44 @@
 " My neovim config file
 call plug#begin('~/.vim/plugged')
 " === brains ===
-Plug 'neoclide/coc.nvim', { 'branch': 'release' } " Intellisense engine form vim8 & neovim, full lsp as vscode
-Plug 'junegunn/fzf', { 'do': {-> fzf#install()} } " Fuzzy text completion
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }           " Intellisense engine form vim8 & neovim, full lsp as vscode
+Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }           " Fuzzy text completion
 Plug 'junegunn/fzf.vim'
-Plug 'vim-syntastic/syntastic'                    " For linters
-
-" The following 2 plugins have eaten out my brain more times than I would like to admit.
-" Note to future self: DONT
+Plug 'vim-syntastic/syntastic'                              " Syntax checking hacks for vim: For linters
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
 Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
 
 " === language-specific ===
-Plug 'Vimjas/vim-python-pep8-indent'               " A nicer Python indentation style for Vim
-Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}  " Go development plugin for vim
-Plug 'HerringtonDarkholme/yats.vim'                " TS Syntax
-Plug 'jackguo380/vim-lsp-cxx-highlight'            " C++ syntax highlighting
-Plug 'rhysd/vim-clang-format'                      " Vim plugin for clang-format, a formatter for C/C++, Objc, Java, JS, TS
+Plug 'Vimjas/vim-python-pep8-indent'                        " A nicer Python indentation style for Vim
+Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}           " Go development plugin for vim
+Plug 'HerringtonDarkholme/yats.vim'                         " TS Syntax
+Plug 'jackguo380/vim-lsp-cxx-highlight'                     " C++ syntax highlighting
+Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format, a formatter for C/C++, Objc, Java, JS, TS
 
 " === shortcuts ===
-Plug 'tpope/vim-surround'             " Quoting / parenthesizing made simple
-Plug 'tpope/vim-commentary'           " Comment out stuff: gcc to comment a line; gc<motion> for magic
-Plug 'junegunn/vim-easy-align'        " Simple, easy-to-ubse vim-alignment plugin
-Plug 'christoomey/vim-tmux-navigator' " Seamless navigation between tmux panes and vim splits
-Plug 'tpope/vim-fugitive'             " A Git wrapper 'so awesome, it should be illegal'
+Plug 'tpope/vim-surround'                                   " Quoting / parenthesizing made simple
+Plug 'tpope/vim-commentary'                                 " Comment out stuff: gcc to comment a line; gc<motion> for magic
+Plug 'tpope/vim-fugitive'                                   " A Git wrapper 'so awesome, it should be illegal'
+Plug 'junegunn/vim-easy-align'                              " A Vim alignment plugin
+Plug 'christoomey/vim-tmux-navigator'                       " Seamless navigation between tmux panes and vim splits
 
-" === editor visuals ===
-Plug 'ap/vim-css-color'                  " Preview colours in source code while editing
-Plug 'itchyny/lightline.vim'             " Lightweight statusline
-Plug 'mengelbrecht/lightline-bufferline' " ...display the list of buffers in the lightline vim plugin
-Plug 'josa42/vim-lightline-coc'          " Coc diagnostics indicator for lightline
-Plug 'kyazdani42/nvim-web-devicons'      " for file icons
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'lambdalisue/nerdfont.vim'          " Fundamental plugin to handle Nerd fonts in Vim
+" === editor extension ===
+Plug 'itchyny/lightline.vim'                                " Lightweight statusline
+Plug 'mengelbrecht/lightline-bufferline'                    " ...display the list of buffers in the lightline vim plugin
+Plug 'josa42/vim-lightline-coc'                             " Coc diagnostics indicator for lightline
+Plug 'kyazdani42/nvim-tree.lua'                             " File tree explorer
+
+" === nice to haves ===
+Plug 'ap/vim-css-color'                                     " Preview colours in source code while editing
+Plug 'kyazdani42/nvim-web-devicons'                         " For file icons
+Plug 'lambdalisue/nerdfont.vim'                             " Fundamental plugin to handle Nerd fonts in Vim
 
 " === themes ===
-Plug 'sickill/vim-monokai'    " Refined Monokai color scheme for Vim, inspired by Sublime text
-Plug 'haishanh/night-owl.vim' " Awesome Night-owl theme by Sarah Drasner
-Plug 'morhetz/gruvbox'        " Retro groove color scheme for vim
-Plug 'joshdick/onedark.vim'   " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
+Plug 'sickill/vim-monokai'                                  " Refined Monokai color scheme for Vim, inspired by Sublime text
+Plug 'haishanh/night-owl.vim'                               " Awesome Night-owl theme by Sarah Drasner
+Plug 'morhetz/gruvbox'                                      " Retro groove color scheme for vim
+Plug 'joshdick/onedark.vim'                                 " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
+Plug 'tomasiser/vim-code-dark'                              " Dark color scheme inspired by Dark+ in VSCode
 call plug#end()
 
 " === general ===
@@ -121,6 +121,43 @@ elseif $ITERM_PROFILE ==# "Monokai"
         \ 'colorscheme': 'molokai',
         \ 'active': {
           \ 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'filename', 'modified' ], ['gitbranch'], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
+          \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
+        \ },
+        \ 'mode_map': {
+        \ 'n' : 'N',
+        \ 'i' : 'I',
+        \ 'r' : 'R',
+        \ 'v' : 'V',
+        \ 'V' : 'VL',
+        \ "\<c-v>": 'VB',
+        \ 'c' : 'C',
+        \ 's' : 'S',
+        \ 'S' : 'SL',
+        \ "\<c-s>": 'SB',
+        \ 't': 'T',
+        \ },
+        \ 'tabline': {
+        \ 'left': [['buffers']],
+        \ 'right': [[]], 
+        \ },
+        \ 'component_function': {
+        \ 'gitbranch': 'fugitive#head',
+        \ 'gutentags': 'gutentags#statusline',
+        \ 'filename': 'LightlineTruncatedFileName'
+        \},
+        \ 'component_expand':{
+          \ 'buffers': 'lightline#bufferline#buffers',
+        \},
+        \ 'component_type': {
+        \ 'buffers': 'tabsel',
+        \},
+        \}
+elseif $ITERM_PROFILE ==# "Iosevka"
+  colorscheme codedark
+  let g:lightline = {
+        \ 'colorscheme': 'wombat',
+        \ 'active': {
+          \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
           \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding'], ['gutentags'], ],
         \ },
         \ 'mode_map': {
