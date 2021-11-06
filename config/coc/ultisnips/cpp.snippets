@@ -1,1 +1,78 @@
-/Users/Russel/.config/coc/ultisnips/cpp.snippets
+# A valid snippet should starts with:
+#
+#		snippet trigger_word [ "description" [ options ] ]
+#
+# and end with:
+#
+#		endsnippet
+#
+# Snippet options:
+#
+#		b - Beginning of line.
+#		i - In-word expansion.
+#		w - Word boundary.
+#		r - Regular expression
+#		e - Custom context snippet
+#		A - Snippet will be triggered automatically, when condition matches.
+#
+# Basic example:
+#
+#		snippet emitter "emitter properties" b
+#		private readonly ${1} = new Emitter<$2>()
+#		public readonly ${1/^_(.*)/$1/}: Event<$2> = this.$1.event
+#		endsnippet
+#
+# Online reference: https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt
+
+snippet compro "Competitive programming" b
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define INF numeric_limits<int>::max()
+#define NINF numeric_limits<int>::min()
+
+
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	$0
+
+	return 0;
+}
+endsnippet
+
+snippet compro_testcases "CP for t test cases" b
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+#define INF numeric_limits<int>::max()
+#define NINF numeric_limits<int>::min()
+
+void test_case(int t) {
+	$0	
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(nullptr);
+
+	int t{};
+	cin >> t;
+
+	for (int i = 1; i <= t; ++i) {
+		test_case(i);
+	}
+
+	return 0;
+}
+endsnippet
+
+snippet input_array "Get user input: array" b
+int size{};
+cin >> size;
+vector<int> array(size);
+for (auto& a : array) cin >> a;
+$0
+endsnippet
