@@ -502,26 +502,39 @@ set updatetime=300 " Having longer update times lead to poor UX
 set shortmess+=c   " Don't pass messages to |ins-completion-menu|
 set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
 
+" Use <C-space> to trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
+
+" " Use <cr> to confirm completion. 
+" " <C-g>u means break undo chain at current position
+" " Coc only does snippet and additional edit on confirm
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 " To make snippet completion work just like VSCode
-" https://github.com/neoclide/coc.nvim/wiki/Using-snippets
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <C-space> to trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion. 
-" <C-g>u means break undo chain at current position
-" Coc only does snippet and additional edit on confirm
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+let g:coc_snippet_next = '<tab>'
 
 " Use `[g` and `]g` to navigate diagnostics
 nmap <silent> [c <Plug>(coc-diagnostic-prev)
