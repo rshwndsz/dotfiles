@@ -29,7 +29,7 @@ Plug 'christoomey/vim-tmux-navigator'                       " Seamless navigatio
 Plug 'itchyny/lightline.vim'                                " Lightweight statusline
 Plug 'mengelbrecht/lightline-bufferline'                    " ...display the list of buffers in the lightline vim plugin
 Plug 'josa42/vim-lightline-coc'                             " Coc diagnostics indicator for lightline
-Plug 'kyazdani42/nvim-web-devicons'                         " For file icons
+Plug 'ryanoasis/vim-devicons'
 Plug 'lambdalisue/nerdfont.vim'                             " Fundamental plugin to handle Nerd fonts in Vim
 " Plug 'kyazdani42/nvim-tree.lua'                             " File tree explorer
 
@@ -38,7 +38,7 @@ Plug 'sickill/vim-monokai'                                  " Refined Monokai co
 Plug 'haishanh/night-owl.vim'                               " Awesome Night-owl theme by Sarah Drasner
 Plug 'morhetz/gruvbox'                                      " Retro groove color scheme for vim
 Plug 'joshdick/onedark.vim'                                 " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
-Plug 'tomasiser/vim-code-dark'                              " Dark color scheme inspired by Dark+ in VSCode
+Plug 'Mofiqul/vscode.nvim'                                  " Dark+ and Light+ theme in Visual Studio Code 
 call plug#end()
 
 
@@ -71,7 +71,8 @@ elseif $ITERM_PROFILE ==# "Monokai"
   colorscheme monokai
   let &LIGHTLINE_COLORSCHEME='molokai'
 elseif $ITERM_PROFILE ==# "Iosevka"
-  colorscheme codedark
+  let g:vscode_style = "dark"
+  colorscheme vscode
   let LIGHTLINE_COLORSCHEME='wombat'
 else 
   colorscheme onedark
@@ -236,7 +237,7 @@ let g:lightline = {
   \ 'colorscheme': LIGHTLINE_COLORSCHEME,
   \ 'active': {
     \ 'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename', 'modified' ], ['coc_info', 'coc_hints', 'coc_errors', 'coc_warnings', 'coc_ok' ], [ 'coc_status'  ]],
-    \ 'right': [ ['percent'], ['lineinfo'], ['fileformat', 'fileencoding', 'filetype'], ['gutentags'], ],
+    \ 'right': [ ['percent'], ['lineinfo'], ['filetypewithicon'], ['gutentags'], ],
   \ },
   \ 'mode_map': {
     \ 'n' : 'N',
@@ -256,9 +257,10 @@ let g:lightline = {
     \ 'right': [[]], 
   \ },
   \ 'component_function': {
-    \ 'gitbranch': 'fugitive#head',
+    \ 'gitbranch': 'GitBranch',
     \ 'gutentags': 'gutentags#statusline',
-    \ 'filename': 'LightlineTruncatedFileName'
+    \ 'filename': 'LightlineTruncatedFileName',
+    \ 'filetypewithicon': 'FileTypeWithIcon',
   \},
   \ 'component_expand':{
     \ 'buffers': 'lightline#bufferline#buffers',
@@ -268,14 +270,32 @@ let g:lightline = {
   \},
 \}
 
+" https://github.com/itchyny/lightline.vim/issues/416
+function! FileTypeWithIcon() 
+  let filetype_with_icon = &filetype !=# '' ? &filetype : 'no ft'
+  let modified = &modified ? '  ' : ''
+  return winwidth(0) > 70 ? WebDevIconsGetFileTypeSymbol() . ' ' . modified . &filetype : ' '
+endfunction
+
+" https://github.com/itchyny/lightline.vim/issues/594
+function! GitBranch() 
+  let head=FugitiveHead()
+
+  if head ==# ""
+    return head
+  else
+    return " " . FugitiveHead()
+  endif
+endfunction
+
 " https://github.com/itchyny/lightline.vim/issues/532
 function! LightlineTruncatedFileName()
-let l:filePath = expand('%')
-    if winwidth(0) > 100
-        return l:filePath
-    else
-        return pathshorten(l:filePath)
-    endif
+  let l:filePath = expand('%')
+  if winwidth(0) > 100
+    return l:filePath
+  else
+    return pathshorten(l:filePath)
+  endif
 endfunction
 
 " Register components
@@ -649,9 +669,9 @@ let g:syntastic_check_on_wq = 0
 "-- following options are the default
 "require'nvim-tree'.setup {
 "  -- disables netrw completely
-"  disable_netrw       = true,
+"  disable_netrw       = false,
 "  -- hijack netrw window on startup
-"  hijack_netrw        = true,
+"  hijack_netrw        = false,
 "  -- open the tree when running this setup function
 "  open_on_setup       = false,
 "  -- will not open on setup if the filetype is in this list
@@ -726,20 +746,20 @@ let g:syntastic_check_on_wq = 0
 "}
 "EOF
 
-"let g:nvim_tree_gitignore = 1 "0 by default
-"let g:nvim_tree_quit_on_open = 0 "0 by default, closes the tree when you open a file
-"let g:nvim_tree_indent_markers = 1 "0 by default, this option shows indent markers when folders are open
-"let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
-"let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
-"let g:nvim_tree_root_folder_modifier = ':~' "This is the default. See :help filename-modifiers for more options
-"let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
-"let g:nvim_tree_group_empty = 1 " 0 by default, compact folders that only contain a single folder into one node in the file tree
-"let g:nvim_tree_disable_window_picker = 1 "0 by default, will disable the window picker.
-"let g:nvim_tree_icon_padding = ' ' "one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
-"let g:nvim_tree_symlink_arrow = ' >> ' " defaults to ' ➛ '. used as a separator between symlinks' source and target.
-"let g:nvim_tree_respect_buf_cwd = 1 "0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
-"let g:nvim_tree_create_in_closed_folder = 0 "1 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
-"let g:nvim_tree_refresh_wait = 500 "1000 by default, control how often the tree can be refreshed, 1000 means the tree can be refresh once per 1000ms.
+"let g:nvim_tree_gitignore = 1               " 0 by default
+"let g:nvim_tree_quit_on_open = 0            " 0 by default, closes the tree when you open a file
+"let g:nvim_tree_indent_markers = 1          " 0 by default, this option shows indent markers when folders are open
+"let g:nvim_tree_git_hl = 1                  " 0 by default, will enable file highlight for git attributes (can be used without the icons).
+"let g:nvim_tree_highlight_opened_files = 1  " 0 by default, will enable folder and file icon highlight for opened files/directories.
+"let g:nvim_tree_root_folder_modifier = ':~' " This is the default. See :help filename-modifiers for more options
+"let g:nvim_tree_add_trailing = 1            " 0 by default, append a trailing slash to folder names
+"let g:nvim_tree_group_empty = 1             " 0 by default, compact folders that only contain a single folder into one node in the file tree
+"let g:nvim_tree_disable_window_picker = 1   " 0 by default, will disable the window picker.
+"let g:nvim_tree_icon_padding = ' '          " one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
+"let g:nvim_tree_symlink_arrow = ' >> '      " defaults to ' ➛ '. used as a separator between symlinks' source and target.
+"let g:nvim_tree_respect_buf_cwd = 1         " 0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
+"let g:nvim_tree_create_in_closed_folder = 0 " 1 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
+"let g:nvim_tree_refresh_wait = 500          " 1000 by default, control how often the tree can be refreshed, 1000 means the tree can be refresh once per 1000ms.
 "let g:nvim_tree_window_picker_exclude = {
 "    \   'filetype': [
 "    \     'notify',
