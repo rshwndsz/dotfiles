@@ -3,6 +3,10 @@
   "suggest.noselect": false,
   "eslint.run": "onSave",
   "prettier.eslintIntegration": true,
+  // https://github.com/neoclide/coc.nvim/issues/640
+  "diagnostic.checkCurrentLine": true,
+  "diagnostic.messageTarget": "echo",
+  "diagnostic.virtualText": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "typescript",
@@ -48,6 +52,7 @@
       }
     }
   },
+  "rust-analyzer.updates.checkOnStartup": false, 
   "rust-analyzer.checkOnSave.command": "clippy",
   "rust-analyzer.completion.autoimport.enable": true,
   "rust-analyzer.rustfmt.enableRangeFormatting": true
