@@ -2,48 +2,43 @@
 
 " === Plugins ===
 call plug#begin('~/.vim/plugged')
+
 " === brains ===
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }           " Intellisense engine form vim8 & neovim, full lsp as vscode
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }           " Intellisense engine for vim8 & neovim
 Plug 'junegunn/fzf', { 'do': {-> fzf#install()} }           " Fuzzy text completion
 Plug 'junegunn/fzf.vim'
-" Plug 'vim-syntastic/syntastic'                              " Syntax checking hacks for vim: For linters
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configurations and abstraction layers
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter configs and abstraction layers
 Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
 
-" === language-specific ===
+" === language specific ===
 Plug 'Vimjas/vim-python-pep8-indent'                        " A nicer Python indentation style for Vim
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}           " Go development plugin for vim
-Plug 'HerringtonDarkholme/yats.vim'                         " TS Syntax
+Plug 'HerringtonDarkholme/yats.vim'                         " TypeScript Syntax
 Plug 'jackguo380/vim-lsp-cxx-highlight'                     " C++ syntax highlighting
-Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format, a formatter for C/C++, Objc, Java, JS, TS
-Plug 'kevinoid/vim-jsonc'                                   " Vim syntax highlighting for JSON with C-style and block style comments
+Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format
+Plug 'kevinoid/vim-jsonc'                                   " Syntax highlighting for JSON w/ C-style comments
 
 " === shortcuts ===
 Plug 'tpope/vim-surround'                                   " Quoting / parenthesizing made simple
-Plug 'tpope/vim-commentary'                                 " Comment out stuff: gcc to comment a line; gc<motion> for magic
+Plug 'tpope/vim-commentary'                                 " Comment out stuff: gcc to comment a line
 Plug 'tpope/vim-fugitive'                                   " A Git wrapper 'so awesome, it should be illegal'
 Plug 'junegunn/vim-easy-align'                              " A Vim alignment plugin
-Plug 'christoomey/vim-tmux-navigator'                       " Seamless navigation between tmux panes and vim splits
+Plug 'christoomey/vim-tmux-navigator'                       " Navigation between tmux panes and vim splits
 
-" === editor extension ===
+" === editor extensions ===
 Plug 'itchyny/lightline.vim'                                " Lightweight statusline
-Plug 'mengelbrecht/lightline-bufferline'                    " ...display the list of buffers in the lightline vim plugin
+Plug 'mengelbrecht/lightline-bufferline'                    " ...display buffers in lightline
 Plug 'josa42/vim-lightline-coc'                             " Coc diagnostics indicator for lightline
 Plug 'ryanoasis/vim-devicons'
 Plug 'lambdalisue/nerdfont.vim'                             " Fundamental plugin to handle Nerd fonts in Vim
-" Plug 'kyazdani42/nvim-tree.lua'                             " File tree explorer
-" if has('nvim') || has('patch-8.0.902')
-"   Plug 'mhinz/vim-signify'
-" else
-"   Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
-" endif
 
 " === themes ===
-Plug 'sickill/vim-monokai'                                  " Refined Monokai color scheme for Vim, inspired by Sublime text
+Plug 'sickill/vim-monokai'                                  " Inspired by Sublime text
 Plug 'haishanh/night-owl.vim'                               " Awesome Night-owl theme by Sarah Drasner
 Plug 'morhetz/gruvbox'                                      " Retro groove color scheme for vim
-Plug 'joshdick/onedark.vim'                                 " A dark (n)vim color scheme inspired by Atom's one dark syntax theme
-Plug 'Mofiqul/vscode.nvim'                                  " Dark+ and Light+ theme in Visual Studio Code 
+Plug 'joshdick/onedark.vim'                                 " Inspired by Atom's one dark syntax theme
+Plug 'Mofiqul/vscode.nvim'                                  " Dark+ and Light+ theme in Visual Studio Code
+
 call plug#end()
 
 
@@ -52,13 +47,14 @@ let g:python3_host_prog = '/usr/local/bin/python3' " python for neovim
 set encoding=utf-8
 set splitbelow                                     " open horizontal splits at bottom
 set splitright                                     " open vertical splits at right
+" https://stackoverflow.com/a/30691754
 set clipboard=unnamedplus
 " https://github.com/neoclide/coc.nvim/issues/2063#issuecomment-642183675
 set pumheight=10
 
 
 " === visuals ===
-if (has("termguicolors"))
+if (has('termguicolors'))
   set termguicolors
 endif
 syntax enable  " enable syntax highlighting
@@ -67,18 +63,23 @@ if !has('gui_running')
   set t_co=256
 endif
 
-if $ITERM_PROFILE ==# "Gruvbox"
+" Setup colors based on iTerm2 profile
+if $ITERM_PROFILE ==# 'Gruvbox'
   " https://github.com/morhetz/gruvbox/wiki/configuration
-  let g:gruvbox_contrast_dark="medium"
+  let g:gruvbox_contrast_dark='medium'
   colorscheme gruvbox
   let LIGHTLINE_COLORSCHEME='seoul256'
-elseif $ITERM_PROFILE ==# "Monokai"
+elseif $ITERM_PROFILE ==# 'Monokai'
   colorscheme monokai
-  let &LIGHTLINE_COLORSCHEME='molokai'
-elseif $ITERM_PROFILE ==# "Iosevka"
-  let g:vscode_style = "dark"
+  let LIGHTLINE_COLORSCHEME='molokai'
+elseif $ITERM_PROFILE ==# 'Iosevka'
+  let g:vscode_style = 'dark'
   colorscheme vscode
   let LIGHTLINE_COLORSCHEME='wombat'
+elseif $ITERM_PROFILE ==# 'Iosevka Light'
+  let g:vscode_style = 'light'
+  colorscheme vscode
+  let LIGHTLINE_COLORSCHEME='ayu_light'
 else 
   colorscheme onedark
   let LIGHTLINE_COLORSCHEME='onedark'
@@ -89,29 +90,24 @@ endif
 " adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
 " enable filetype plugins
 filetype plugin indent on
+
 " configure backspace so it acts as it should act
 set backspace=indent,eol,start confirm
 set whichwrap+=<,>,h,l
 
-" linebreak on 500 characters
-set lbr
+set lbr          " linebreak on 500 characters
 set tw=250
-" auto indent
-set ai
-" smart indent
-set si
-" wrap lines
-set wrap
-" use spaces instead of tab
-set expandtab
-" be smart when using tabs :)
-set smarttab
-" 1 tab <-> 2 spaces
-set shiftwidth=2
+set ai           " auto indent
+set si           " smart indent
+set wrap         " wrap lines
+set expandtab    " use spaces instead of tab
+set smarttab     " be smart when using tabs :)
+set shiftwidth=2 " 1 tab <-> 2 spaces
 set tabstop=2
 
 
-" === Language specific stuff ===
+" === Language specific settings ===
+" FIXME This should be done with lang-specific plugins, not manually
 au BufNewFile,BufRead *.go  setlocal noet ts=4 sw=4 sts=4
 au BufNewFile,BufRead *.rs  setlocal noet ts=4 sw=4 sts=4
 autocmd BufRead,BufNewFile *.json set filetype=jsonc
@@ -163,11 +159,13 @@ set nobackup
 set nowritebackup " some servers (coc.vim) have issues with backup files
 set nowb
 set autoread
+
 " triger `autoread` when files changes on disk
 autocmd focusgained,bufenter,cursorhold,cursorholdi * if mode() != 'c' | checktime | endif
+
 " notification after file change
 autocmd filechangedshellpost *
-      \ echohl warningmsg | echo "file changed on disk. buffer reloaded." | echohl none
+      \ echohl warningmsg | echo 'file changed on disk. buffer reloaded.' | echohl none
 
 
 " === scrolling ===
@@ -188,6 +186,7 @@ let maplocalleader = ","  " https://github.com/jalvesaq/nvim-r/issues/101#issuec
 " bd - buffer-delete
 nnoremap <leader>bd <c-w>q
 nnoremap <leader>bn :w<cr>:bn<cr> 
+
 " splits
 " vs - vertical-split
 nnoremap <leader>vs :vsplit<cr>
@@ -226,10 +225,12 @@ let g:tmux_navigator_save_on_switch = 2
 " disable vim-go's :GoDef short cut
 " This is done by CoC's gd
 let g:go_def_mapping_enabled = 0
+
 " see - https://tpaschalis.github.io/vim-go-setup/
-let g:go_fmt_command = "goimports"    " run goimports along gofmt on each save
+let g:go_fmt_command = 'goimports'    " run goimports along gofmt on each save
 let g:go_fmt_autosave = 1
 let g:go_auto_type_info = 1           " automatically get signature/type info for object under cursor
+
 " https://github.com/golang/tools/blob/master/gopls/doc/vim.md#cocnvim
 " autocmd BufWritePre *.go :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
@@ -358,14 +359,17 @@ nmap ga <Plug>(EasyAlign)
 
 
 " === Tree-sitter === 
+" https://github.com/nvim-treesitter/nvim-treesitter
 " All modules are disabled by default and need to be activated explicitly in your init.vim
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  ensure_installed = 'maintained',
   ignore_install = { },
   -- "Consistent sytax highlighting"
   highlight = {
-    enable = true,              -- false will disable the whole extension
+    -- false will disable the whole extension
+    enable = true,
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
     -- Using this option may slow down your editor, and you may see some duplicate highlights.
@@ -376,21 +380,17 @@ require'nvim-treesitter.configs'.setup {
   incremental_selection = {
     enable = true,
     keymaps = {
-      init_selection = "gnn",
-      node_incremental = "grn",
-      scope_incremental = "grc",
-      node_decremental = "grm",
+      init_selection = 'gnn',
+      node_incremental = 'grn',
+      scope_incremental = 'grc',
+      node_decremental = 'grm',
     },
-  },
-  -- Indentation based on =
-  indent = {
-    enable = true
   },
 }
 EOF
 
 
-" === Tags === 
+" === GutenTags ===
 " From https://www.reddit.com/r/vim/comments/d77t6j/guide_how_to_setup_ctags_with_gutentags_properly/
 " Configure what a 'new project' means for gutentags
 let g:gutentags_add_default_project_roots = 0
@@ -456,8 +456,7 @@ augroup end
 
 " === fzf.vim ===
 " Layout
-" Default is a floating window. Uncomment to change.
-" - https://stackoverflow.com/a/63912546
+" Default is a floating window. Uncomment to change. ~ https://stackoverflow.com/a/63912546
 " let g:fzf_layout = { 'down': '~30%' }
 
 " Customize fzf colors to match your color scheme
@@ -483,7 +482,7 @@ command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
 
 " Since I'm used to ctrl-p
-nnoremap <C-p> :GFiles<CR> 
+nnoremap <C-p> :GFiles<CR>
 nnoremap <leader>fi :Files<CR>
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-f> :Rg<CR>
@@ -521,35 +520,21 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " if hidden is not set, TextEdit might fail
 set hidden
 set cmdheight=1
-set updatetime=300 " Having longer update times lead to poor UX
-set shortmess+=c   " Don't pass messages to |ins-completion-menu|
-set signcolumn=yes " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
+" Having longer update times lead to poor UX
+set updatetime=300
+" Don't pass messages to |ins-completion-menu|
+set shortmess+=c
+" Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
+set signcolumn=yes
 
 " Use <C-space> to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" " https://github.com/neoclide/coc.nvim/wiki/Using-snippets
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" " Use <cr> to confirm completion. 
-" " <C-g>u means break undo chain at current position
-" " Coc only does snippet and additional edit on confirm
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " To make snippet completion work just like VSCode
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ <SID>check_back_space() ? '\<TAB>' :
       \ coc#refresh()
 
 function! s:check_back_space() abort
@@ -560,8 +545,8 @@ endfunction
 let g:coc_snippet_next = '<tab>'
 
 " Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> g[ <Plug>(coc-diagnostic-prev)
+nmap <silent> g] <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " Open definition in new tab
@@ -657,173 +642,4 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 let g:cpp_class_scope_highlight = 1
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
-
-
-" === Syntastic === 
-" c++ linters
-" let g:syntastic_cpp_checkers = ['cpplint']
-" let g:syntastic_c_checkers = ['cpplint']
-" let g:syntastic_cpp_cpplint_exec = 'cpplint'
-" " the following two lines are optional. configure it to your liking!
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
-
-
-" === nvim-tree ===
-"lua <<EOF
-"-- following options are the default
-"require'nvim-tree'.setup {
-"  -- disables netrw completely
-"  disable_netrw       = false,
-"  -- hijack netrw window on startup
-"  hijack_netrw        = false,
-"  -- open the tree when running this setup function
-"  open_on_setup       = false,
-"  -- will not open on setup if the filetype is in this list
-"  ignore_ft_on_setup  = {},
-"  -- closes neovim automatically when the tree is the last **WINDOW** in the view
-"  auto_close          = true,
-"  -- opens the tree when changing/opening a new tab if the tree wasn't previously opened
-"  open_on_tab         = false,
-"  -- hijacks new directory buffers when they are opened.
-"  update_to_buf_dir   = {
-"    -- enable the feature
-"    enable = true,
-"    -- allow to open the tree if it was previously closed
-"    auto_open = true,
-"  },
-"  -- hijack the cursor in the tree to put it at the start of the filename
-"  hijack_cursor       = true,
-"  -- updates the root directory of the tree on `DirChanged` (when your run `:cd` usually)
-"  update_cwd          = false,
-"  -- show lsp diagnostics in the signcolumn
-"  diagnostics = {
-"    enable = false,
-"    icons = {
-"      hint = "",
-"      info = "",
-"      warning = "",
-"      error = "",
-"    }
-"  },
-"  -- update the focused file on `BufEnter`, un-collapses the folders recursively until it finds the file
-"  update_focused_file = {
-"    -- enables the feature
-"    enable      = false,
-"    -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
-"    -- only relevant when `update_focused_file.enable` is true
-"    update_cwd  = false,
-"    -- list of buffer names / filetypes that will not update the cwd if the file isn't found under the current root directory
-"    -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
-"    ignore_list = {}
-"  },
-"  -- configuration options for the system open command (`s` in the tree by default)
-"  system_open = {
-"    -- the command to run this, leaving nil should work in most cases
-"    cmd  = nil,
-"    -- the command arguments as a list
-"    args = {}
-"  },
-
-"  view = {
-"    -- width of the window, can be either a number (columns) or a string in `%`, for left or right side placement
-"    width = 30,
-"    -- height of the window, can be either a number (columns) or a string in `%`, for top or bottom side placement
-"    height = 30,
-"    -- side of the tree, can be one of 'left' | 'right' | 'top' | 'bottom'
-"    side = 'left',
-"    -- if true the tree will resize itself after opening a file
-"    auto_resize = true,
-"    mappings = {
-"      -- custom only false will merge the list with the default mappings
-"      -- if true, it will only use your list to set the mappings
-"      custom_only = false,
-"      -- list of mappings to set on the tree manually
-"      list = {}
-"    }
-"  },
-
-"  ignore_ft_on_setup = { '.git', 'node_modules', '.cache' },
-"  filters = {
-"    dotfiles = true,
-"  },
-
-"}
-"EOF
-
-"let g:nvim_tree_gitignore = 0               " 0 by default
-"let g:nvim_tree_quit_on_open = 0            " 0 by default, closes the tree when you open a file
-"let g:nvim_tree_indent_markers = 1          " 0 by default, this option shows indent markers when folders are open
-"let g:nvim_tree_git_hl = 0                  " 0 by default, will enable file highlight for git attributes (can be used without the icons).
-"let g:nvim_tree_highlight_opened_files = 1  " 0 by default, will enable folder and file icon highlight for opened files/directories.
-"let g:nvim_tree_root_folder_modifier = ':~' " This is the default. See :help filename-modifiers for more options
-"let g:nvim_tree_add_trailing = 1            " 0 by default, append a trailing slash to folder names
-"let g:nvim_tree_group_empty = 1             " 0 by default, compact folders that only contain a single folder into one node in the file tree
-"let g:nvim_tree_disable_window_picker = 1   " 0 by default, will disable the window picker.
-"let g:nvim_tree_icon_padding = ' '          " one space by default, used for rendering the space between the icon and the filename. Use with caution, it could break rendering if you set an empty string depending on your font.
-"let g:nvim_tree_symlink_arrow = ' >> '      " defaults to ' ➛ '. used as a separator between symlinks' source and target.
-"let g:nvim_tree_respect_buf_cwd = 1         " 0 by default, will change cwd of nvim-tree to that of new buffer's when opening nvim-tree.
-"let g:nvim_tree_create_in_closed_folder = 0 " 1 by default, When creating files, sets the path of a file when cursor is on a closed folder to the parent folder when 0, and inside the folder when 1.
-"let g:nvim_tree_refresh_wait = 500          " 1000 by default, control how often the tree can be refreshed, 1000 means the tree can be refresh once per 1000ms.
-"let g:nvim_tree_window_picker_exclude = {
-"    \   'filetype': [
-"    \     'notify',
-"    \     'packer',
-"    \     'qf'
-"    \   ],
-"    \   'buftype': [
-"    \     'terminal'
-"    \   ]
-"    \ }
-"" Dictionary of buffer option names mapped to a list of option values that
-"" indicates to the window picker that the buffer's window should not be
-"" selectable.
-"let g:nvim_tree_special_files = { 'README.md': 1, 'Makefile': 1, 'MAKEFILE': 1 } " List of filenames that gets highlighted with NvimTreeSpecialFile
-"let g:nvim_tree_show_icons = {
-"    \ 'git': 0,
-"    \ 'folders': 1,
-"    \ 'files': 1,
-"    \ 'folder_arrows': 1,
-"    \ }
-""If 0, do not show the icons for one of 'git' 'folder' and 'files'
-""1 by default, notice that if 'files' is 1, it will only display
-""if nvim-web-devicons is installed and on your runtimepath.
-""if folder is 1, you can also tell folder_arrows 1 to show small arrows next to the folder icons.
-""but this will not work when you set indent_markers (because of UI conflict)
-
-"" default will show icon by default if no icon is provided
-"" default shows no icon by default
-"let g:nvim_tree_icons = {
-"    \ 'default': '',
-"    \ 'symlink': '',
-"    \ 'git': {
-"    \   'unstaged': "✗",
-"    \   'staged': "✓",
-"    \   'unmerged': "",
-"    \   'renamed': "➜",
-"    \   'untracked': "★",
-"    \   'deleted': "",
-"    \   'ignored': "◌"
-"    \   },
-"    \ 'folder': {
-"    \   'arrow_open': "",
-"    \   'arrow_closed': "",
-"    \   'default': "",
-"    \   'open': "",
-"    \   'empty': "",
-"    \   'empty_open': "",
-"    \   'symlink': "",
-"    \   'symlink_open': "",
-"    \   }
-"    \ }
-
-"nnoremap <C-n> :NvimTreeToggle<CR>
-"nnoremap <leader>r :NvimTreeRefresh<CR>
-"nnoremap <leader>n :NvimTreeFindFile<CR>
-"" NvimTreeOpen, NvimTreeClose, NvimTreeFocus and NvimTreeResize are also available if you need them
-
-"set termguicolors " this variable must be enabled for colors to be applied properly
-
-"" a list of groups can be found at `:help nvim_tree_highlight`
-"highlight NvimTreeFolderIcon guibg=blue
 

@@ -84,5 +84,13 @@ alias bakobsidian="bash ~/dotfiles/bin/backup-obsidian.sh"
 # compinit
 # autoload -Uz bashcompinit && bashcompinit
 
+# --- My functions ---
+# golang test coverage
+# From: https://stackoverflow.com/a/27284510
+cover () { 
+    t="/tmp/go-cover.$$.tmp"
+    go test -coverprofile=$t $@ && go tool cover -html=$t && unlink $t
+}
+
 # Prompt! -> https://starship.rs/
 eval "$(starship init zsh)"

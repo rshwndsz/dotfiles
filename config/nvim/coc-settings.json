@@ -5,7 +5,7 @@
   "prettier.eslintIntegration": true,
   // https://github.com/neoclide/coc.nvim/issues/640
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.messageTarget": "echo",
+  "diagnostic.messageTarget": "float",
   "diagnostic.virtualText": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
