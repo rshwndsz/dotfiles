@@ -1,0 +1,12 @@
+
+if application "Spotify" is running then
+    tell application "Spotify"
+        if (get player state) is playing then
+            set songName to (get name of current track)
+            set songArtist to (get artist of current track)
+            return songName & " by " & songArtist 
+        end if
+        return (get player state)
+    end tell
+end if
+

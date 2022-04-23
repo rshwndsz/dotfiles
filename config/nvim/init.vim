@@ -11,33 +11,34 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'} " Nvim Treesitter co
 Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that manages your tag files
 
 " === language specific ===
-Plug 'Vimjas/vim-python-pep8-indent'                        " A nicer Python indentation style for Vim
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}           " Go development plugin for vim
 Plug 'HerringtonDarkholme/yats.vim'                         " TypeScript Syntax
 Plug 'jackguo380/vim-lsp-cxx-highlight'                     " C++ syntax highlighting
 Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format
 Plug 'kevinoid/vim-jsonc'                                   " Syntax highlighting for JSON w/ C-style comments
+Plug 'Vimjas/vim-python-pep8-indent'
 
 " === shortcuts ===
+Plug 'christoomey/vim-tmux-navigator'                       " Navigation between tmux panes and vim splits
 Plug 'tpope/vim-surround'                                   " Quoting / parenthesizing made simple
 Plug 'tpope/vim-commentary'                                 " Comment out stuff: gcc to comment a line
 Plug 'tpope/vim-fugitive'                                   " A Git wrapper 'so awesome, it should be illegal'
 Plug 'junegunn/vim-easy-align'                              " A Vim alignment plugin
-Plug 'christoomey/vim-tmux-navigator'                       " Navigation between tmux panes and vim splits
+Plug 'jiangmiao/auto-pairs'
 
 " === editor extensions ===
+Plug 'ryanoasis/vim-devicons'                               " Add file-type icons to vim plugins
+Plug 'lambdalisue/nerdfont.vim'                             " Handle Nerd fonts in Vim
 Plug 'itchyny/lightline.vim'                                " Lightweight statusline
-Plug 'mengelbrecht/lightline-bufferline'                    " ...display buffers in lightline
+Plug 'mengelbrecht/lightline-bufferline'                    " Display buffers in lightline
 Plug 'josa42/vim-lightline-coc'                             " Coc diagnostics indicator for lightline
-Plug 'ryanoasis/vim-devicons'
-Plug 'lambdalisue/nerdfont.vim'                             " Fundamental plugin to handle Nerd fonts in Vim
 
 " === themes ===
-Plug 'sickill/vim-monokai'                                  " Inspired by Sublime text
-Plug 'haishanh/night-owl.vim'                               " Awesome Night-owl theme by Sarah Drasner
-Plug 'morhetz/gruvbox'                                      " Retro groove color scheme for vim
+Plug 'Mofiqul/vscode.nvim', { 'branch': 'main' }            " Dark+ and Light+ theme as in Visual Studio Code
 Plug 'joshdick/onedark.vim'                                 " Inspired by Atom's one dark syntax theme
-Plug 'Mofiqul/vscode.nvim'                                  " Dark+ and Light+ theme in Visual Studio Code
+Plug 'haishanh/night-owl.vim'                               " Night-owl theme by Sarah Drasner
+Plug 'morhetz/gruvbox'                                      " Retro groove color scheme for vim
+Plug 'patstockwell/vim-monokai-tasty'                       " Inspired by Sublime Text's interpretation of monokai
 
 call plug#end()
 
@@ -48,7 +49,7 @@ set encoding=utf-8
 set splitbelow                                     " open horizontal splits at bottom
 set splitright                                     " open vertical splits at right
 " https://stackoverflow.com/a/30691754
-set clipboard=unnamedplus
+set clipboard^=unnamed,unnamedplus
 " https://github.com/neoclide/coc.nvim/issues/2063#issuecomment-642183675
 set pumheight=10
 
@@ -69,12 +70,12 @@ if $ITERM_PROFILE ==# 'Gruvbox'
   let g:gruvbox_contrast_dark='medium'
   colorscheme gruvbox
   let LIGHTLINE_COLORSCHEME='seoul256'
-elseif $ITERM_PROFILE ==# 'Monokai'
-  colorscheme monokai
-  let LIGHTLINE_COLORSCHEME='molokai'
+elseif $ITERM_PROFILE ==# 'Monokai' || $ITERM_PROFILE ==# 'Iosevka Monokai'
+  colorscheme vim-monokai-tasty
+  let LIGHTLINE_COLORSCHEME='monokai_tasty'
 elseif $ITERM_PROFILE ==# 'Iosevka'
   let g:vscode_style = 'dark'
-  colorscheme vscode
+  colorscheme vscode 
   let LIGHTLINE_COLORSCHEME='wombat'
 elseif $ITERM_PROFILE ==# 'Iosevka Light'
   let g:vscode_style = 'light'
@@ -102,15 +103,23 @@ set si           " smart indent
 set wrap         " wrap lines
 set expandtab    " use spaces instead of tab
 set smarttab     " be smart when using tabs :)
-set shiftwidth=2 " 1 tab <-> 2 spaces
-set tabstop=2
 
 
 " === Language specific settings ===
-" FIXME This should be done with lang-specific plugins, not manually
-au BufNewFile,BufRead *.go  setlocal noet ts=4 sw=4 sts=4
-au BufNewFile,BufRead *.rs  setlocal noet ts=4 sw=4 sts=4
-autocmd BufRead,BufNewFile *.json set filetype=jsonc
+" Use JSON with comments instead of JSON
+" autocmd BufRead,BufNewFile *.json set filetype=jsonc
+
+" https://joshtronic.com/2016/08/21/set-vim-tab-spacing-based-on-the-type-of-file/
+autocmd FileType go setlocal tabstop=4 shiftwidth=4
+
+" Google .clang-format
+autocmd FileType c setlocal ts=2 sw=2 sts=2
+
+autocmd FileType java setlocal ts=2 sw=2 sts=2
+
+" https://www.reddit.com/r/golang/comments/unc7a/comment/c4ww8p8
+" au BufNewFile,BufRead *.go  setlocal noet ts=4 sw=4 sts=4
+" au BufNewFile,BufRead *.rs  setlocal noet ts=4 sw=4 sts=4
 
 
 " === line numbering ===
@@ -212,7 +221,6 @@ autocmd filetype * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 nnoremap <leader>vo :e ~/.config/nvim/init.vim<cr>
 " reload config file 
 nnoremap <c-s> :w<cr>:source ~/.config/nvim/init.vim<cr>
-
 
 " === plugin settings ===
 
@@ -507,7 +515,7 @@ let g:coc_global_extensions = [
       \ 'coc-prettier', 
       \ 'coc-json', 
       \ 'coc-rust-analyzer',
-      \ 'coc-jedi',
+      \ 'coc-pyright',
       \ ]
 
 " Setup Prettier
@@ -527,20 +535,24 @@ set shortmess+=c
 " Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved.
 set signcolumn=yes
 
-" Use <C-space> to trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
+" Use <CR> to confirm completion
+" https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources#use-cr-to-confirm-completion
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" To make snippet completion work just like VSCode
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? '\<TAB>' :
-      \ coc#refresh()
-
+" Use <Tab> to trigger completion
+" https://github.com/neoclide/coc.nvim/wiki/Completion-with-sources#use-tab-or-custom-key-for-trigger-completion
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+" Use <C-space> to trigger completion
+inoremap <silent><expr> <c-space> coc#refresh()
 
 let g:coc_snippet_next = '<tab>'
 

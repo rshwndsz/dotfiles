@@ -1,5 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=$PATH:/Users/Russel/.nimble/bin
 
 # For proper color_preset
 export TERM=xterm-256color
@@ -94,3 +95,18 @@ cover () {
 
 # Prompt! -> https://starship.rs/
 eval "$(starship init zsh)"
+
+
+# === Java === 
+# For the system Java wrappers to find this JDK, symlink it with
+# sudo ln -sfn /usr/local/opt/openjdk/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk.jdk
+
+# openjdk is keg-only, which means it was not symlinked into /usr/local,
+# because macOS provides similar software and installing this software in
+# parallel can cause all kinds of trouble.
+
+# If you need to have openjdk first in your PATH, run:
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
+
+# For compilers to find openjdk you may need to set:
+export CPPFLAGS="-I/usr/local/opt/openjdk/include"
