@@ -12,10 +12,8 @@ Plug 'ludovicchabant/vim-gutentags'                         " A Vim plugin that 
 
 " === language specific ===
 Plug 'fatih/vim-go', {'do': ':GoInstallBinaries'}           " Go development plugin for vim
-Plug 'HerringtonDarkholme/yats.vim'                         " TypeScript Syntax
 Plug 'jackguo380/vim-lsp-cxx-highlight'                     " C++ syntax highlighting
 Plug 'rhysd/vim-clang-format'                               " Vim plugin for clang-format
-Plug 'kevinoid/vim-jsonc'                                   " Syntax highlighting for JSON w/ C-style comments
 Plug 'Vimjas/vim-python-pep8-indent'
 
 " === shortcuts ===
@@ -65,11 +63,17 @@ if !has('gui_running')
 endif
 
 " Setup colors based on iTerm2 profile
-if $ITERM_PROFILE ==# 'Gruvbox'
+if $ITERM_PROFILE ==# 'Gruvbox Dark' || $ITERM_PROFILE ==# 'Iosevka Gruvbox Dark'
   " https://github.com/morhetz/gruvbox/wiki/configuration
-  let g:gruvbox_contrast_dark='medium'
+  let g:gruvbox_contrast_dark='hard'
   colorscheme gruvbox
-  let LIGHTLINE_COLORSCHEME='seoul256'
+  let LIGHTLINE_COLORSCHEME='gruvbox'
+  set background=dark
+elseif $ITERM_PROFILE ==# 'Gruvbox Light' || $ITERM_PROFILE ==# 'Iosevka Gruvbox Light'
+  let g:gruvbox_contrast_light='hard'
+  colorscheme gruvbox
+  let LIGHTLINE_COLORSCHEME='gruvbox'
+  set background=light
 elseif $ITERM_PROFILE ==# 'Monokai' || $ITERM_PROFILE ==# 'Iosevka Monokai'
   colorscheme vim-monokai-tasty
   let LIGHTLINE_COLORSCHEME='monokai_tasty'
@@ -86,6 +90,11 @@ else
   let LIGHTLINE_COLORSCHEME='onedark'
 endif
 
+
+" === sidebar ===
+" https://shapeshed.com/vim-netrw/
+" Remove top banner
+let g:netrw_banner = 0
 
 " === spacing & indentation ===
 " adapted from https://github.com/amix/vimrc/blob/master/vimrcs/basic.vim
@@ -106,8 +115,7 @@ set smarttab     " be smart when using tabs :)
 
 
 " === Language specific settings ===
-" Use JSON with comments instead of JSON
-" autocmd BufRead,BufNewFile *.json set filetype=jsonc
+set ts=2 sw=2 sts=2
 
 " https://joshtronic.com/2016/08/21/set-vim-tab-spacing-based-on-the-type-of-file/
 autocmd FileType go setlocal tabstop=4 shiftwidth=4
@@ -116,6 +124,9 @@ autocmd FileType go setlocal tabstop=4 shiftwidth=4
 autocmd FileType c setlocal ts=2 sw=2 sts=2
 
 autocmd FileType java setlocal ts=2 sw=2 sts=2
+
+autocmd FileType javascript setlocal ts=2 sw=2 sts=2
+autocmd FileType json setlocal ts=2 sw=2 sts=2
 
 " https://www.reddit.com/r/golang/comments/unc7a/comment/c4ww8p8
 " au BufNewFile,BufRead *.go  setlocal noet ts=4 sw=4 sts=4
@@ -372,7 +383,8 @@ nmap ga <Plug>(EasyAlign)
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
   -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = 'maintained',
+  ensure_installed = { 'c', 'rust', 'vim', 'cpp', 'java', 'javascript', 'go', 'python', 'cmake', 'cuda', 
+                       'dockerfile', 'latex', 'lua', 'regex', 'typescript', 'verilog', 'yaml', 'toml' },
   ignore_install = { },
   -- "Consistent sytax highlighting"
   highlight = {
@@ -507,21 +519,21 @@ autocmd FileType c,cpp,cs,java setlocal commentstring=//\ %s
 
 " === coc.vim ===
 " coc config
-let g:coc_global_extensions = [
-      \ 'coc-snippets',
-      \ 'coc-pairs',
-      \ 'coc-tsserver',
-      \ 'coc-eslint', 
-      \ 'coc-prettier', 
-      \ 'coc-json', 
-      \ 'coc-rust-analyzer',
-      \ 'coc-pyright',
-      \ ]
+" let g:coc_global_extensions = [
+"       \ 'coc-snippets',
+"       \ 'coc-pairs',
+"       \ 'coc-tsserver',
+"       \ 'coc-eslint', 
+"       \ 'coc-prettier', 
+"       \ 'coc-json', 
+"       \ 'coc-rust-analyzer',
+"       \ 'coc-pyright',
+"       \ ]
 
-" Setup Prettier
-" https://github.com/neoclide/coc-prettier#usage
-" Use :Prettier to format buffer
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+" " Setup Prettier
+" " https://github.com/neoclide/coc-prettier#usage
+" " Use :Prettier to format buffer
+" command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " Settings
 " https://ianding.io/2019/07/29/configure-coc-nvim-for-c-c++-development/
